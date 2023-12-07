@@ -8,3 +8,6 @@ This is useful for automatic building of plugins, using all the existing Nuke ve
 It scans the page once a day and checks if there is anything new. If that is the case, it will be added to the JSON that is placed in this repo.
 There is no manual process done here, making sure it will stay up-to-date until this page has been modified.
 
+## How to use?
+The raw link to the JSON's can be used to retrieve date in your own scripts. There are multiple JSON files, each with their own purpose.
+For example it might only be needed when compiling plugins to look at the JSON that shows the latest minor versions, not the different small versions, as then the plugin does not need to be recompiled.
