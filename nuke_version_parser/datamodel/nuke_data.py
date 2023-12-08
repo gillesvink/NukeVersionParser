@@ -9,14 +9,26 @@ from dataclasses import dataclass
 
 
 @dataclass
-class NukeInstaller:
-    """Data related to a link to a Nuke version."""
+class SemanticVersion:
+    """Data object to store a semantic version."""
 
-    mac_x86_64: str
+    major: int
+    """The big release of software."""
+    minor: int
+    """The feature improvement release."""
+    patch: int
+    """Bugfix release."""
+
+
+@dataclass
+class NukeInstaller:
+    """Data related to the installer a Nuke release."""
+
+    mac_x86: str
     """URL to the Mac installer."""
-    linux_x86_64: str
+    linux_x86: str
     """URL to the Linux installer."""
-    windows_x86_64: str
+    windows_x86: str
     """URL to the Windows installer."""
     mac_arm: str = None
     """URL to the Mac ARM (M1, M2..) installer.
@@ -24,19 +36,11 @@ class NukeInstaller:
 
 
 @dataclass
-class NukeVersion:
-    """Data related to a specific Nuke Version."""
+class NukeRelease:
+    """Data related to a specific release of Nuke."""
 
-    major: int
-    """Major version."""
-    minor: int
-    """Feature improvement."""
-    version: int
-    """Bugfix release"""
-    supported: bool
-    """True if still maintained, False if not."""
-    date: str
-    """Date of release."""
+    version: SemanticVersion
+    """Semantic version data of the release."""
     installer: NukeInstaller
     """Installer data."""
 
@@ -45,7 +49,8 @@ class NukeVersion:
 class NukeFamily:
     """Data containing everything related to a family of Nuke versions."""
 
-    versions: list[NukeVersion]
+    releases: list[NukeRelease]
+    """List of releases part of this family."""
 
     def __post_init__(self) -> None:
         """Check if provided NukeVersions are compatible.
@@ -53,7 +58,9 @@ class NukeFamily:
         Raises:
             IncompatibleFamilyError: if versions are not the same major.
         """
-        all_versions = {nuke_version.version for nuke_version in self.versions}
+        all_versions = {
+            nuke_version.version.major for nuke_version in self.releases
+        }
         if len(all_versions) != 1:
             msg = (
                 f"Family contains more than one major version: {all_versions}."
@@ -63,12 +70,13 @@ class NukeFamily:
     @property
     def supported(self) -> bool:
         """Return if this family is currently supported."""
-        return any(version.supported for version in self.versions)
+        return any(version.supported for version in self.releases)
 
     @property
     def version(self) -> int:
         """Return the version identifier of this family."""
-        return self.versions[0].version
+        semantic_version: SemanticVersion = self.releases[0].version
+        return semantic_version.major
 
 
 class IncompatibleFamilyError(Exception):
