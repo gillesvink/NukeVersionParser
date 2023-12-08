@@ -1,6 +1,7 @@
 """Constants related to the version parser.
 
-@maintainer: Gilles Vink"""
+@maintainer: Gilles Vink
+"""
 
 from enum import Enum
 
