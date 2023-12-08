@@ -59,7 +59,7 @@ class NukeFamily:
             IncompatibleFamilyError: if versions are not the same major.
         """
         all_versions = {
-            nuke_version.version.major for nuke_version in self.releases
+            release.version.major for release in self.releases
         }
         if len(all_versions) != 1:
             msg = (
