@@ -19,7 +19,8 @@ if TYPE_CHECKING:
 
 
 def _get_architecture_formatting(
-    architecture: Architecture, old_format: bool | None = None
+    architecture: Architecture,
+    version: SemanticVersion,
 ) -> str:
     """Get the architecture formatting.
 
@@ -29,7 +30,7 @@ def _get_architecture_formatting(
 
     Args:
         architecture: the specific architecture that is requested
-        old_format (optional): if old format is used. Defaults to None.
+        version: to determine if old formatting should be used
 
     Returns:
         architecture mapped to the expected format.
@@ -37,7 +38,7 @@ def _get_architecture_formatting(
     if architecture == Architecture.ARM:
         return f"{architecture.value}64"
 
-    format_suffix = "-release-64" if old_format else "_64"
+    format_suffix = "-release-64" if version.major < 13 else "_64"
     return f"{architecture.value}{format_suffix}"
 
 
@@ -51,7 +52,7 @@ def _get_file_extension(operating_system: OperatingSystem) -> str:
         corresponding file extension: either dmg, exe or tgz
     """
     if operating_system == OperatingSystem.WINDOWS:
-        return "exe"
+        return "zip"
     if operating_system == OperatingSystem.MAC:
         return "dmg"
     return "tgz"
@@ -61,7 +62,6 @@ def calculate_url(
     version: SemanticVersion,
     system: OperatingSystem,
     architecture: Architecture,
-    old_format: bool | None = None,
 ) -> str:
     """Calculate external url based on provided data.
 
@@ -79,7 +79,7 @@ def calculate_url(
         calculated possible url
     """
     calculated_architecture = _get_architecture_formatting(
-        architecture=architecture, old_format=old_format
+        version=version, architecture=architecture
     )
     file_extension = _get_file_extension(operating_system=system)
 

@@ -14,51 +14,49 @@ from nuke_version_parser.parser.url_calculator import calculate_url
 
 
 @pytest.mark.parametrize(
-    ("system", "architecture", "old_format", "expected_url"),
+    ("version", "system", "architecture", "expected_url"),
     [
         (
+            SemanticVersion(12, 3, 2),
             OperatingSystem.LINUX,
             Architecture.X86,
-            True,
-            "https://thefoundry.s3.amazonaws.com/products/nuke/releases/10.3v2/Nuke10.3v2-linux-x86-release-64.tgz",
+            "https://thefoundry.s3.amazonaws.com/products/nuke/releases/12.3v2/Nuke12.3v2-linux-x86-release-64.tgz",
         ),
         (
+            SemanticVersion(13, 3, 2),
             OperatingSystem.LINUX,
             Architecture.X86,
-            False,
-            "https://thefoundry.s3.amazonaws.com/products/nuke/releases/10.3v2/Nuke10.3v2-linux-x86_64.tgz",
+            "https://thefoundry.s3.amazonaws.com/products/nuke/releases/13.3v2/Nuke13.3v2-linux-x86_64.tgz",
         ),
         (
+            SemanticVersion(13, 3, 2),
             OperatingSystem.MAC,
             Architecture.X86,
-            False,
-            "https://thefoundry.s3.amazonaws.com/products/nuke/releases/10.3v2/Nuke10.3v2-mac-x86_64.dmg",
+            "https://thefoundry.s3.amazonaws.com/products/nuke/releases/13.3v2/Nuke13.3v2-mac-x86_64.dmg",
         ),
         (
+            SemanticVersion(13, 3, 2),
             OperatingSystem.MAC,
             Architecture.ARM,
-            False,
-            "https://thefoundry.s3.amazonaws.com/products/nuke/releases/10.3v2/Nuke10.3v2-mac-arm64.dmg",
+            "https://thefoundry.s3.amazonaws.com/products/nuke/releases/13.3v2/Nuke13.3v2-mac-arm64.dmg",
         ),
         (
+            SemanticVersion(13, 3, 2),
             OperatingSystem.WINDOWS,
             Architecture.X86,
-            False,
-            "https://thefoundry.s3.amazonaws.com/products/nuke/releases/10.3v2/Nuke10.3v2-win-x86_64.exe",
+            "https://thefoundry.s3.amazonaws.com/products/nuke/releases/13.3v2/Nuke13.3v2-win-x86_64.zip",
         ),
     ],
 )
 def test_url_calculator(
-    system, architecture, old_format, expected_url
+    version, system, architecture, expected_url
 ) -> None:
     """Test the url calculator to correspond with the expected url."""
-    semantic_version = SemanticVersion(10, 3, 2)
     assert (
         calculate_url(
-            version=semantic_version,
+            version=version,
             system=system,
             architecture=architecture,
-            old_format=old_format,
         )
         == expected_url
     )

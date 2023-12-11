@@ -15,13 +15,14 @@ from nuke_version_parser.datamodel.constants import (
     OperatingSystem,
 )
 from nuke_version_parser.datamodel.nuke_data import (
+    NukeFamily,
     NukeInstaller,
     NukeRelease,
     SemanticVersion,
 )
 from nuke_version_parser.parser.parse_data import (
-    VersionParser,
-    parse_release_data_by_attribute,
+    _parse_release_data_by_attribute,
+    _VersionParser,
 )
 
 
@@ -47,7 +48,7 @@ class TestVersionParser:
     @pytest.mark.parametrize("data_exists", [True, False])
     def test_retrieve_data(self, data_exists: bool) -> None:
         """Test to retrieve None with code 403 and str with code 200."""
-        version_parser = VersionParser(SemanticVersion(1, 0, 0))
+        version_parser = _VersionParser(SemanticVersion(1, 0, 0))
         response_mock = MagicMock(spec=Response)
         response_mock.headers = {"last-modified": "test_date"}
         response_mock.status_code = 200 if data_exists else 403
@@ -58,7 +59,7 @@ class TestVersionParser:
             "nuke_version_parser.parser.parse_data.requests.get",
             return_value=response_mock,
         ):
-            retrieved_data = version_parser.retrieve_data(  # noqa: SLF001
+            retrieved_data = version_parser.retrieve_data(
                 OperatingSystem.LINUX, Architecture.X86
             )
 
@@ -75,7 +76,7 @@ class TestVersionParser:
     @pytest.mark.parametrize("data_exists", [True, False])
     def test_retrieve_data_store_date(self, data_exists: bool) -> None:
         """Test that date is stored when data is available."""
-        version_parser = VersionParser(SemanticVersion(1, 0, 0))
+        version_parser = _VersionParser(SemanticVersion(1, 0, 0))
         response_mock = MagicMock(spec=Response)
         response_mock.status_code = 200 if data_exists else 403
         response_mock.headers = {"last-modified": "test_date"}
@@ -105,7 +106,7 @@ class TestVersionParser:
             "nuke_version_parser.parser.parse_data.requests.get",
             return_value=response_mock,
         ):
-            retrieved_data = VersionParser.to_nuke_release(
+            retrieved_data = _VersionParser.to_nuke_release(
                 SemanticVersion(1, 0, 0)
             )
 
@@ -154,10 +155,36 @@ class TestParseReleaseDataByAttribute:
                 "second_data",
                 None,
             ]
-            parse_release_data_by_attribute(
+            _parse_release_data_by_attribute(
                 SemanticVersion(1, 0, 0), attribute_name
             )
 
         assert version_parser_mock.call_count == 3
         version_parser_mock.assert_any_call(expected_calls[0])
         version_parser_mock.assert_any_call(expected_calls[1])
+
+
+# class TestParseAllData:
+#     """Tests related to the parse_all_data function."""
+
+#     @pytest.fixture()
+#     def release_parser_mock(self) -> MagicMock:
+#         """Mock to set the status code"""
+#         with patch(
+#             "nuke_version_parser.parser.parse_data.requests.response.status_code"
+#         ) as status_code_mock:
+#             status_code_mock.side_effect = [200, 200, 403]
+#             yield status_code_mock
+
+#     def test__get_all_families(self, version_parser_mock) -> None:
+#         """Test to retrieve all existing families."""
+#         families: set[NukeFamily] = FamilyCollector._get_all_families()
+
+#         assert isinstance(families, set)
+#         for family in families:
+#             assert isinstance(family, NukeFamily)
+#         collected_versions = {family.version for family in families}
+#         assert collected_versions == {
+#             SemanticVersion(9, 0, 1),
+#             SemanticVersion(10, 0, 1),
+#         }

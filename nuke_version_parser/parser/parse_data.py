@@ -3,21 +3,30 @@
 @maintainer: Gilles Vink
 """
 from __future__ import annotations
+
+import logging
 from copy import deepcopy
+
 import requests
+
+from nuke_version_parser.datamodel.constants import (
+    Architecture,
+    OperatingSystem,
+)
 from nuke_version_parser.datamodel.nuke_data import (
+    NukeFamily,
     NukeInstaller,
     NukeRelease,
     SemanticVersion,
 )
 from nuke_version_parser.parser.url_calculator import calculate_url
-from nuke_version_parser.datamodel.constants import (
-    OperatingSystem,
-    Architecture,
-)
+
+__slots__ = ("FamilyCollector",)
+
+logger = logging.getLogger(__name__)
 
 
-class VersionParser:
+class _VersionParser:
     """Object that is responsible for fetching data by version."""
 
     def __init__(self, version: SemanticVersion) -> None:
@@ -76,12 +85,19 @@ class VersionParser:
         calculated_url = calculate_url(
             version=self._version, system=system, architecture=architecture
         )
-        response = requests.get(calculated_url, timeout=1)
+        response = requests.head(calculated_url, timeout=1)
         if response.status_code != 200:
+            msg = f"Found no data for {calculated_url}"
+            logger.info(msg)
             return None
 
         if not self._date:
             self._date = response.headers.get("last-modified")
+
+        msg = f"Processed {calculated_url}"
+        print(msg)
+        logger.info(msg)
+
         return calculated_url
 
     @property
@@ -94,9 +110,9 @@ class VersionParser:
         return self._date
 
 
-def parse_release_data_by_attribute(
+def _parse_release_data_by_attribute(
     start_version: SemanticVersion, attribute_name: str
-) -> set[NukeRelease]:
+) -> list[NukeRelease]:
     """Parse data by start version and iterate over provided attribute.
 
     Args:
@@ -104,22 +120,88 @@ def parse_release_data_by_attribute(
         attribute_name: attribute name to use for iterating
 
     Returns:
-        set of NukeRelease if found, else empty set.
+        list of NukeRelease if found, else empty list.
     """
     latest_version = deepcopy(start_version)
-    previous_release = VersionParser.to_nuke_release(start_version)
+    previous_release = _VersionParser.to_nuke_release(start_version)
     if not previous_release:
-        return set()
+        return []
 
-    nuke_releases = {previous_release}
+    nuke_releases = [previous_release]
 
     while previous_release:
         latest_version = deepcopy(latest_version)
-        attribute = getattr(latest_version, attribute_name)
-        setattr(latest_version, attribute_name, attribute + 1)
-        release = VersionParser.to_nuke_release(latest_version)
+        attribute_value = getattr(latest_version, attribute_name)
+        setattr(latest_version, attribute_name, attribute_value + 1)
+        release = _VersionParser.to_nuke_release(latest_version)
         if release:
-            nuke_releases.add(release)
+            nuke_releases.append(release)
         previous_release = release
 
     return nuke_releases
+
+
+class FamilyCollector:
+    """Object that handles the collection of family data."""
+
+    START_VERSION = SemanticVersion(9, 0, 1)
+    """First version that will be looked for."""
+
+    def __new__(cls) -> list[NukeFamily]:
+        """Return all found Nuke Families in a list."""
+        families = cls._get_all_families()
+        for family in families:
+            minor_versions = cls._get_all_minor_versions_from_family(family)
+            family.releases.extend(minor_versions)
+            patches = []
+            for minor_version in minor_versions:
+                found_patches = cls._get_all_patches_from_minor_release(
+                    minor_version
+                )
+                patches.extend(found_patches)
+            family.releases.extend(patches)
+
+        return families
+
+    @classmethod
+    def _get_all_families(cls) -> list[NukeFamily]:
+        """Return a list of NukeFamilies.
+
+        Note:
+            this is only major versions.
+        """
+        families = _parse_release_data_by_attribute(cls.START_VERSION, "major")
+        return [NukeFamily([family]) for family in families]
+
+    @staticmethod
+    def _get_all_minor_versions_from_family(
+        family: NukeFamily,
+    ) -> list[NukeRelease]:
+        """Return a list of all found minor versions from a Family.
+
+        Args:
+            family: to find minor versions from.
+
+        Returns:
+            list of found minor Nuke releases.
+        """
+        found_release: NukeRelease = family.releases[0]
+        version = deepcopy(found_release.version)
+        version.minor += 1
+        return _parse_release_data_by_attribute(version, "minor")
+
+    @staticmethod
+    def _get_all_patches_from_minor_release(
+        minor: NukeRelease,
+    ) -> list[NukeRelease]:
+        """Return a list of all found patches from a minor release.
+
+        Args:
+            minor: to find patch versions from.
+
+        Returns:
+            list of found patch Nuke releases.
+        """
+        version = deepcopy(minor.version)
+        version.patch += 1
+        return _parse_release_data_by_attribute(version, "patch")
