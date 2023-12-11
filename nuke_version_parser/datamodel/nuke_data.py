@@ -24,15 +24,15 @@ class SemanticVersion:
 class NukeInstaller:
     """Data related to the installer a Nuke release."""
 
-    mac_x86: str
+    mac_x86: str = None
     """URL to the Mac installer."""
-    linux_x86: str
-    """URL to the Linux installer."""
-    windows_x86: str
-    """URL to the Windows installer."""
     mac_arm: str = None
     """URL to the Mac ARM (M1, M2..) installer.
     Note: only supported from Nuke 15+"""
+    linux_x86: str = None
+    """URL to the Linux installer."""
+    windows_x86: str = None
+    """URL to the Windows installer."""
 
 
 @dataclass
@@ -43,6 +43,8 @@ class NukeRelease:
     """Semantic version data of the release."""
     installer: NukeInstaller
     """Installer data."""
+    date: str
+    """Date of release."""
 
 
 @dataclass

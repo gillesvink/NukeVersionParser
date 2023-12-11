@@ -35,7 +35,12 @@ class TestNukeFamily:
     ) -> None:
         """Test that the supported property corresponds to the data."""
         test_nuke_versions = [
-            MagicMock(spec=NukeRelease, supported=supported, version=self.DUMMY_VERSION)
+            MagicMock(
+                spec=NukeRelease,
+                supported=supported,
+                version=self.DUMMY_VERSION,
+                date=None,
+            )
             for supported in test_supported_values
         ]
         assert NukeFamily(test_nuke_versions).supported == expected_supported
@@ -44,7 +49,7 @@ class TestNukeFamily:
         """Test to raise an IncompatibleFamily during differing versions."""
         all_versions = [SemanticVersion(14, 1, 2), SemanticVersion(15, 1, 2)]
         test_nuke_versions = [
-            MagicMock(spec=NukeRelease, version=version)
+            MagicMock(spec=NukeRelease, version=version, date=None)
             for version in all_versions
         ]
 
@@ -63,7 +68,7 @@ class TestNukeFamily:
     ) -> None:
         """Test that from a list of int, the correct version is retrieved."""
         test_nuke_versions = [
-            MagicMock(spec=NukeRelease, version=version)
+            MagicMock(spec=NukeRelease, version=version, date=None)
             for version in test_versions
         ]
 
