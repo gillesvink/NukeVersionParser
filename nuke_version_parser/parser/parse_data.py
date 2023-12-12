@@ -95,7 +95,6 @@ class _VersionParser:
             self._date = response.headers.get("last-modified")
 
         msg = f"Processed {calculated_url}"
-        print(msg)
         logger.info(msg)
 
         return calculated_url
@@ -147,22 +146,6 @@ class FamilyCollector:
     START_VERSION = SemanticVersion(9, 0, 1)
     """First version that will be looked for."""
 
-    def __new__(cls) -> list[NukeFamily]:
-        """Return all found Nuke Families in a list."""
-        families = cls._get_all_families()
-        for family in families:
-            minor_versions = cls._get_all_minor_versions_from_family(family)
-            family.releases.extend(minor_versions)
-            patches = []
-            for minor_version in minor_versions:
-                found_patches = cls._get_all_patches_from_minor_release(
-                    minor_version
-                )
-                patches.extend(found_patches)
-            family.releases.extend(patches)
-
-        return families
-
     @classmethod
     def _get_all_families(cls) -> list[NukeFamily]:
         """Return a list of NukeFamilies.
@@ -170,38 +153,36 @@ class FamilyCollector:
         Note:
             this is only major versions.
         """
-        families = _parse_release_data_by_attribute(cls.START_VERSION, "major")
-        return [NukeFamily([family]) for family in families]
+        releases = _parse_release_data_by_attribute(cls.START_VERSION, "major")
+        return [NukeFamily([release]) for release in releases]
 
     @staticmethod
-    def _get_all_minor_versions_from_family(
+    def _find_all_minor_versions(
         family: NukeFamily,
-    ) -> list[NukeRelease]:
-        """Return a list of all found minor versions from a Family.
+    ) -> None:
+        """Find all minor versions and add them to the family.
 
         Args:
             family: to find minor versions from.
-
-        Returns:
-            list of found minor Nuke releases.
         """
         found_release: NukeRelease = family.releases[0]
         version = deepcopy(found_release.version)
         version.minor += 1
-        return _parse_release_data_by_attribute(version, "minor")
+        minor_versions = _parse_release_data_by_attribute(version, "minor")
+        family.releases.extend(minor_versions)
 
     @staticmethod
-    def _get_all_patches_from_minor_release(
-        minor: NukeRelease,
+    def _find_all_patch_versions(
+        family: NukeFamily,
     ) -> list[NukeRelease]:
-        """Return a list of all found patches from a minor release.
+        """Find all minor versions and add them to the family.
 
         Args:
-            minor: to find patch versions from.
-
-        Returns:
-            list of found patch Nuke releases.
+            family: to find minor versions from.
         """
-        version = deepcopy(minor.version)
-        version.patch += 1
-        return _parse_release_data_by_attribute(version, "patch")
+        patch_versions = []
+        for release in family.releases:
+            version = deepcopy(release.version)
+            version.patch += 1
+            patch_versions.extend(_parse_release_data_by_attribute(version, "patch"))
+        family.releases.extend(patch_versions)

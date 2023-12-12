@@ -15,11 +15,13 @@ from nuke_version_parser.datamodel.constants import (
     OperatingSystem,
 )
 from nuke_version_parser.datamodel.nuke_data import (
+    NukeFamily,
     NukeInstaller,
     NukeRelease,
     SemanticVersion,
 )
 from nuke_version_parser.parser.parse_data import (
+    FamilyCollector,
     _parse_release_data_by_attribute,
     _VersionParser,
 )
@@ -90,7 +92,7 @@ class TestVersionParser:
         if data_exists:
             assert version_parser.date == "test_date"
         else:
-            assert version_parser.date == None
+            assert version_parser.date is None
 
     @pytest.mark.parametrize("data_exists", [True, False])
     def test_to_nuke_release(self, data_exists: bool) -> None:
@@ -163,19 +165,80 @@ class TestParseReleaseDataByAttribute:
         version_parser_mock.assert_any_call(expected_calls[1])
 
 
-# class TestParseAllData:
-#     """Tests related to the parse_all_data function."""
+class TestFamilyCollector:
+    """Tests related to the FamilyCollector."""
 
-#     @pytest.fixture()
-#     def release_parser_mock(self) -> MagicMock:
-#         """Mock to set the status code"""
-#         with patch(
-#             "nuke_version_parser.parser.parse_data.requests.response.status_code"
-#         ) as status_code_mock:
-#             yield status_code_mock
+    def test__get_all_families(self) -> None:
+        """Test to retrieve all existing families."""
+        release_1 = NukeRelease(
+            version=SemanticVersion(9, 0, 1), installer=None, date=None
+        )
+        release_2 = NukeRelease(
+            version=SemanticVersion(10, 0, 1), installer=None, date=None
+        )
+        expected_families = [NukeFamily([release_1]), NukeFamily([release_2])]
 
-#     def test__get_all_families(self, version_parser_mock) -> None:
-#         """Test to retrieve all existing families."""
+        with patch(
+            "nuke_version_parser.parser.parse_data._parse_release_data_by_attribute"
+        ) as version_parser_mock:
+            version_parser_mock.return_value = [
+                release_1,
+                release_2,
+            ]
+            collected_families = FamilyCollector._get_all_families()
 
-#         for family in families:
-#         assert collected_versions == {
+        assert collected_families == expected_families
+
+    def test__find_all_minor_versions(self) -> None:
+        """Test find all minor versions to find new versions from family."""
+        already_found_release = NukeRelease(
+            version=SemanticVersion(9, 0, 1), installer=None, date=None
+        )
+        test_family = NukeFamily([already_found_release])
+        new_release_2 = NukeRelease(
+            version=SemanticVersion(9, 1, 1), installer=None, date=None
+        )
+        new_release_3 = NukeRelease(
+            version=SemanticVersion(9, 2, 1), installer=None, date=None
+        )
+        expected_family = NukeFamily(
+            [already_found_release, new_release_2, new_release_3]
+        )
+
+        with patch(
+            "nuke_version_parser.parser.parse_data._parse_release_data_by_attribute"
+        ) as version_parser_mock:
+            version_parser_mock.return_value = [
+                new_release_2,
+                new_release_3,
+            ]
+            FamilyCollector._find_all_minor_versions(test_family)
+
+        assert test_family == expected_family
+
+    def test__find_all_patch_versions(self) -> None:
+        """Test find all patch versions to find new versions from family."""
+        already_found_release = NukeRelease(
+            version=SemanticVersion(9, 0, 1), installer=None, date=None
+        )
+        test_family = NukeFamily([already_found_release])
+        new_release_2 = NukeRelease(
+            version=SemanticVersion(9, 0, 2), installer=None, date=None
+        )
+        new_release_3 = NukeRelease(
+            version=SemanticVersion(9, 0, 3), installer=None, date=None
+        )
+        expected_family = NukeFamily(
+            [already_found_release, new_release_2, new_release_3]
+        )
+
+        with patch(
+            "nuke_version_parser.parser.parse_data._parse_release_data_by_attribute"
+        ) as version_parser_mock:
+            version_parser_mock.return_value = [
+                new_release_2,
+                new_release_3,
+            ]
+            FamilyCollector._find_all_patch_versions(test_family)
+
+        assert test_family == expected_family
