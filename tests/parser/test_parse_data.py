@@ -15,7 +15,6 @@ from nuke_version_parser.datamodel.constants import (
     OperatingSystem,
 )
 from nuke_version_parser.datamodel.nuke_data import (
-    NukeFamily,
     NukeInstaller,
     NukeRelease,
     SemanticVersion,
@@ -34,7 +33,7 @@ def _requests_mock() -> None:
     response_mock.headers = {"last-modified": "test_date"}
 
     requests_patch = patch(
-        "nuke_version_parser.parser.parse_data.requests.get",
+        "nuke_version_parser.parser.parse_data.requests.head",
         return_value=response_mock,
     )
 
@@ -56,7 +55,7 @@ class TestVersionParser:
         with patch(
             "nuke_version_parser.parser.parse_data.calculate_url"
         ) as url_calculator_mock, patch(
-            "nuke_version_parser.parser.parse_data.requests.get",
+            "nuke_version_parser.parser.parse_data.requests.head",
             return_value=response_mock,
         ):
             retrieved_data = version_parser.retrieve_data(
@@ -81,7 +80,7 @@ class TestVersionParser:
         response_mock.status_code = 200 if data_exists else 403
         response_mock.headers = {"last-modified": "test_date"}
         with patch(
-            "nuke_version_parser.parser.parse_data.requests.get",
+            "nuke_version_parser.parser.parse_data.requests.head",
             return_value=response_mock,
         ):
             version_parser.retrieve_data(
@@ -103,7 +102,7 @@ class TestVersionParser:
         with patch(
             "nuke_version_parser.parser.parse_data.calculate_url"
         ) as url_calculator_mock, patch(
-            "nuke_version_parser.parser.parse_data.requests.get",
+            "nuke_version_parser.parser.parse_data.requests.head",
             return_value=response_mock,
         ):
             retrieved_data = _VersionParser.to_nuke_release(
@@ -148,7 +147,7 @@ class TestParseReleaseDataByAttribute:
     ) -> None:
         """Test iteration over attribute stops after None."""
         with patch(
-            "nuke_version_parser.parser.parse_data.VersionParser.to_nuke_release"
+            "nuke_version_parser.parser.parse_data._VersionParser.to_nuke_release"
         ) as version_parser_mock:
             version_parser_mock.side_effect = [
                 "first_data",
@@ -173,18 +172,10 @@ class TestParseReleaseDataByAttribute:
 #         with patch(
 #             "nuke_version_parser.parser.parse_data.requests.response.status_code"
 #         ) as status_code_mock:
-#             status_code_mock.side_effect = [200, 200, 403]
 #             yield status_code_mock
 
 #     def test__get_all_families(self, version_parser_mock) -> None:
 #         """Test to retrieve all existing families."""
-#         families: set[NukeFamily] = FamilyCollector._get_all_families()
 
-#         assert isinstance(families, set)
 #         for family in families:
-#             assert isinstance(family, NukeFamily)
-#         collected_versions = {family.version for family in families}
 #         assert collected_versions == {
-#             SemanticVersion(9, 0, 1),
-#             SemanticVersion(10, 0, 1),
-#         }
