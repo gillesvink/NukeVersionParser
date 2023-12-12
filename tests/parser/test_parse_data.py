@@ -171,10 +171,10 @@ class TestFamilyCollector:
     def test__get_all_families(self) -> None:
         """Test to retrieve all existing families."""
         release_1 = NukeRelease(
-            version=SemanticVersion(9, 0, 1), installer=None, date=None
+            version=SemanticVersion(1, 0, 1), installer=None, date=None
         )
         release_2 = NukeRelease(
-            version=SemanticVersion(10, 0, 1), installer=None, date=None
+            version=SemanticVersion(2, 0, 1), installer=None, date=None
         )
         expected_families = [NukeFamily([release_1]), NukeFamily([release_2])]
 
@@ -192,14 +192,14 @@ class TestFamilyCollector:
     def test__find_all_minor_versions(self) -> None:
         """Test find all minor versions to find new versions from family."""
         already_found_release = NukeRelease(
-            version=SemanticVersion(9, 0, 1), installer=None, date=None
+            version=SemanticVersion(1, 0, 1), installer=None, date=None
         )
         test_family = NukeFamily([already_found_release])
         new_release_2 = NukeRelease(
-            version=SemanticVersion(9, 1, 1), installer=None, date=None
+            version=SemanticVersion(1, 1, 1), installer=None, date=None
         )
         new_release_3 = NukeRelease(
-            version=SemanticVersion(9, 2, 1), installer=None, date=None
+            version=SemanticVersion(1, 2, 1), installer=None, date=None
         )
         expected_family = NukeFamily(
             [already_found_release, new_release_2, new_release_3]
@@ -219,14 +219,14 @@ class TestFamilyCollector:
     def test__find_all_patch_versions(self) -> None:
         """Test find all patch versions to find new versions from family."""
         already_found_release = NukeRelease(
-            version=SemanticVersion(9, 0, 1), installer=None, date=None
+            version=SemanticVersion(1, 0, 1), installer=None, date=None
         )
         test_family = NukeFamily([already_found_release])
         new_release_2 = NukeRelease(
-            version=SemanticVersion(9, 0, 2), installer=None, date=None
+            version=SemanticVersion(1, 0, 2), installer=None, date=None
         )
         new_release_3 = NukeRelease(
-            version=SemanticVersion(9, 0, 3), installer=None, date=None
+            version=SemanticVersion(1, 0, 3), installer=None, date=None
         )
         expected_family = NukeFamily(
             [already_found_release, new_release_2, new_release_3]
@@ -242,3 +242,44 @@ class TestFamilyCollector:
             FamilyCollector._find_all_patch_versions(test_family)
 
         assert test_family == expected_family
+
+    def test_collect(self) -> None:
+        """Test collect to iterate over found families and call functions."""
+        major_families = [
+            NukeFamily(
+                [
+                    NukeRelease(
+                        version=SemanticVersion(9, 0, 1),
+                        installer=None,
+                        date=None,
+                    )
+                ],
+            ),
+            NukeFamily(
+                [
+                    NukeRelease(
+                        version=SemanticVersion(10, 0, 1),
+                        installer=None,
+                        date=None,
+                    )
+                ]
+            ),
+        ]
+
+        with patch(
+            "nuke_version_parser.parser.parse_data.FamilyCollector._get_all_families",
+            return_value=major_families,
+        ) as get_families_mock, patch(
+            "nuke_version_parser.parser.parse_data.FamilyCollector._find_all_minor_versions",
+        ) as find_minor_mock, patch(
+            "nuke_version_parser.parser.parse_data.FamilyCollector._find_all_patch_versions",
+        ) as find_patch_mock:
+            collected_families = FamilyCollector()
+
+        assert collected_families
+        for family in collected_families:
+            assert isinstance(family, NukeFamily)
+
+        get_families_mock.assert_called_once()
+        assert find_minor_mock.call_count == 2
+        assert find_patch_mock.call_count == 2

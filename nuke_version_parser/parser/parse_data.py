@@ -146,6 +146,14 @@ class FamilyCollector:
     START_VERSION = SemanticVersion(9, 0, 1)
     """First version that will be looked for."""
 
+    def __new__(cls) -> None:
+        """Fetch and collect all releases into families."""
+        families = cls._get_all_families()
+        for family in families:
+            cls._find_all_minor_versions(family)
+            cls._find_all_patch_versions(family)
+        return families
+
     @classmethod
     def _get_all_families(cls) -> list[NukeFamily]:
         """Return a list of NukeFamilies.
@@ -153,7 +161,9 @@ class FamilyCollector:
         Note:
             this is only major versions.
         """
-        releases = _parse_release_data_by_attribute(cls.START_VERSION, "major")
+        releases = _parse_release_data_by_attribute(
+            cls.START_VERSION, "major"
+        )
         return [NukeFamily([release]) for release in releases]
 
     @staticmethod
@@ -184,5 +194,7 @@ class FamilyCollector:
         for release in family.releases:
             version = deepcopy(release.version)
             version.patch += 1
-            patch_versions.extend(_parse_release_data_by_attribute(version, "patch"))
+            patch_versions.extend(
+                _parse_release_data_by_attribute(version, "patch")
+            )
         family.releases.extend(patch_versions)
