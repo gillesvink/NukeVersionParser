@@ -70,11 +70,21 @@ from nuke_version_parser.parser.url_calculator import calculate_url
             Architecture.X86,
             "https://thefoundry.s3.amazonaws.com/products/nuke/releases/12.0v1/Nuke12.0v1-linux-x86-release-64.tgz",
         ),
+        (
+            SemanticVersion(12, 2, 6),
+            OperatingSystem.LINUX,
+            Architecture.X86,
+            "https://thefoundry.s3.amazonaws.com/products/nuke/releases/12.2v6/Nuke-12.2v6-linux-x86-64-installer.tgz",
+        ),
+        (
+            SemanticVersion(12, 2, 7),
+            OperatingSystem.LINUX,
+            Architecture.X86,
+            "https://thefoundry.s3.amazonaws.com/products/nuke/releases/12.2v7/Nuke12.2v7-linux-x86_64.tgz",
+        ),
     ],
 )
-def test_url_calculator(
-    version, system, architecture, expected_url
-) -> None:
+def test_url_calculator(version, system, architecture, expected_url) -> None:
     """Test the url calculator to correspond with the expected url."""
     assert (
         calculate_url(

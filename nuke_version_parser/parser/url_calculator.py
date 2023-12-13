@@ -36,7 +36,7 @@ def _get_architecture_formatting(
     format_suffix = "_64"
     if version < SemanticVersion(12, 0, 2):
         format_suffix = "-release-64"
-    elif version < SemanticVersion(13, 0, 3):
+    elif _uses_temporary_naming(version):
         format_suffix = "-64-installer"
     return f"{architecture.value}{format_suffix}"
 
@@ -56,6 +56,22 @@ def _get_file_extension(operating_system: OperatingSystem) -> str:
         return "dmg"
     return "tgz"
 
+def _uses_temporary_naming(version: SemanticVersion) -> bool:
+    """This was naming introduced in Nuke 12 and partially 13.
+
+    This function checks if the version is applicable for that naming.
+
+    Args:
+        version: version to check for.
+
+    Returns:
+        True if temporary naming applies, False if not.
+    """
+    if version > SemanticVersion(13, 0, 0) and version < SemanticVersion(13, 0, 3):
+        return True
+    if version > SemanticVersion(12, 0, 1) and version < SemanticVersion(12, 2, 7):
+        return True
+    return False
 
 def calculate_url(
     version: SemanticVersion,
@@ -81,11 +97,7 @@ def calculate_url(
         version=version, architecture=architecture
     )
     file_extension = _get_file_extension(operating_system=system)
-    version_separator = ""
-    if version < SemanticVersion(13, 0, 3) and version > SemanticVersion(
-        12, 0, 1
-    ):
-        version_separator = "-"  # between those versions there is a dash added
+    version_separator = "" if not _uses_temporary_naming(version) else "-"
     return BASE_URL.format(
         major=version.major,
         version_separator=version_separator,
