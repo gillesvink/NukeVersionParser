@@ -30,4 +30,4 @@ def run_collector() -> None:
 
 
 if __name__ == "__main__":
-    run_collector
+    run_collector()
