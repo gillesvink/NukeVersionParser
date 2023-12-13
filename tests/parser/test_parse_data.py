@@ -20,6 +20,7 @@ from nuke_version_parser.datamodel.nuke_data import (
     SemanticVersion,
 )
 from nuke_version_parser.parser.parse_data import (
+    _skip_version_and_jump_to,
     _VersionParser,
     parse_release_data_by_attribute,
 )
@@ -109,6 +110,7 @@ class TestVersionParser:
 class TestParseReleaseDataByAttribute:
     """Tests related to the parse_release_data_by_attribute function."""
 
+    @staticmethod
     @pytest.mark.parametrize(
         ("attribute_name", "expected_calls"),
         [
@@ -127,7 +129,7 @@ class TestParseReleaseDataByAttribute:
         ],
     )
     def test_iterating_over_specified_attribute(
-        self, attribute_name: str, expected_calls: list[SemanticVersion]
+        attribute_name: str, expected_calls: list[SemanticVersion]
     ) -> None:
         """Test iteration over attribute stops after None."""
         with patch(
@@ -146,4 +148,17 @@ class TestParseReleaseDataByAttribute:
         version_parser_mock.assert_any_call(expected_calls[0])
         version_parser_mock.assert_any_call(expected_calls[1])
 
-
+    @staticmethod
+    @pytest.mark.parametrize(
+        ("test_version", "jump_to"),
+        [
+            (SemanticVersion(10, 0, 7), SemanticVersion(10, 5, 1)),
+            (SemanticVersion(10, 0, 1), None),
+        ],
+    )
+    def test_skip_version_and_jump_to(
+        test_version: SemanticVersion,
+        jump_to: SemanticVersion | None,
+    ) -> None:
+        """Test to skip return a new version to continue iterating."""
+        assert _skip_version_and_jump_to(test_version) == jump_to

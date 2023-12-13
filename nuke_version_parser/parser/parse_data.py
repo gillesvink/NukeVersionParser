@@ -58,7 +58,7 @@ class _VersionParser:
             system=OperatingSystem.MAC, architecture=Architecture.X86
         )
         mac_arm = version_parser.retrieve_data(
-            system=OperatingSystem.LINUX, architecture=Architecture.ARM
+            system=OperatingSystem.MAC, architecture=Architecture.ARM
         )
 
         if not version_parser.date:
@@ -144,3 +144,18 @@ def parse_release_data_by_attribute(
     return nuke_releases
 
 
+def _skip_version_and_jump_to(
+    version: SemanticVersion,
+) -> SemanticVersion | None:
+    """Check and return the version to be jumped to.
+
+    Args:
+        version: current version
+
+    Returns:
+        Either None or the version to jump to.
+    """
+    version_10_5 = SemanticVersion(10, 5, 1)
+    if version > SemanticVersion(10, 0, 6) and version < version_10_5:
+        return version_10_5
+    return None
