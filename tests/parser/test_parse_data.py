@@ -25,22 +25,6 @@ from nuke_version_parser.parser.parse_data import (
 )
 
 
-@pytest.fixture(autouse=True)
-def _requests_mock() -> None:
-    """Make sure we actually don't make any requests."""
-    response_mock = MagicMock(spec=Response)
-    response_mock.status_code = 200
-    response_mock.headers = {"last-modified": "test_date"}
-
-    requests_patch = patch(
-        "nuke_version_parser.parser.parse_data.requests.head",
-        return_value=response_mock,
-    )
-
-    with requests_patch:
-        yield
-
-
 class TestVersionParser:
     """Tests related to the version parser object."""
 

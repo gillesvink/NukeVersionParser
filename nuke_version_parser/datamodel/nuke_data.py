@@ -5,7 +5,9 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
+from datetime import datetime, timezone
+from typing import Any
 
 
 @dataclass
@@ -19,16 +21,20 @@ class SemanticVersion:
     patch: int
     """Bugfix release."""
 
+    def __str__(self) -> str:
+        """Return object in string format."""
+        return f"{self.major}.{self.minor}v{self.patch}"
+
 
 @dataclass
 class NukeInstaller:
     """Data related to the installer a Nuke release."""
 
-    mac_x86: str = None
-    """URL to the Mac installer."""
     mac_arm: str = None
     """URL to the Mac ARM (M1, M2..) installer.
     Note: only supported from Nuke 15+"""
+    mac_x86: str = None
+    """URL to the Mac installer."""
     linux_x86: str = None
     """URL to the Linux installer."""
     windows_x86: str = None
@@ -45,6 +51,35 @@ class NukeRelease:
     """Installer data."""
     date: str
     """Date of release."""
+
+    def get_supported(self) -> bool:
+        """Return True if supported, False if not.
+
+        This returns False if the release date is older than 18 months.
+        """
+        if not self.date:
+            msg = "No date is set, can't get supported state."
+            raise ValueError(msg)
+
+        collected_date = datetime.strptime(
+            self.date, "%a, %d %b %Y %H:%M:%S %Z"
+        ).replace(tzinfo=timezone.utc)
+        current_date = datetime.now(timezone.utc)
+
+        days_between: int = (current_date - collected_date).days
+        if days_between <= 548:  # this is roughly 18 months  # noqa: PLR2004
+            return True
+        return False
+
+    def to_dict(self) -> dict[str, dict[str, Any]]:
+        """Return a dict with all data."""
+        return {
+            str(self.version): {
+                "installer": asdict(self.installer),
+                "date": self.date,
+                "supported": self.get_supported(),
+            }
+        }
 
 
 @dataclass
@@ -68,15 +103,23 @@ class NukeFamily:
             raise IncompatibleFamilyError(msg)
 
     @property
-    def supported(self) -> bool:
-        """Return if this family is currently supported."""
-        return any(version.supported for version in self.releases)
-
-    @property
     def version(self) -> int:
         """Return the version identifier of this family."""
         semantic_version: SemanticVersion = self.releases[0].version
         return semantic_version.major
+
+    def get_supported(self) -> bool:
+        """Return bool containing supported status."""
+        return any(version.get_supported() for version in self.releases)
+
+    def to_dict(self) -> dict:
+        """Convert the NukeFamily to a dictionary containing all releases."""
+        combined_data = {}
+        for release in self.releases:
+            release_dict = release.to_dict()
+            combined_data.update(release_dict)
+
+        return {self.version: combined_data}
 
 
 class IncompatibleFamilyError(Exception):
