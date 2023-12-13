@@ -33,7 +33,6 @@ def _get_architecture_formatting(
     """
     if architecture == Architecture.ARM:
         return f"{architecture.value}64"
-    print(version < SemanticVersion(13, 0, 3))
     format_suffix = "_64"
     if version < SemanticVersion(12, 0, 2):
         format_suffix = "-release-64"
@@ -82,9 +81,14 @@ def calculate_url(
         version=version, architecture=architecture
     )
     file_extension = _get_file_extension(operating_system=system)
-
+    version_separator = ""
+    if version < SemanticVersion(13, 0, 3) and version > SemanticVersion(
+        12, 0, 1
+    ):
+        version_separator = "-"  # between those versions there is a dash added
     return BASE_URL.format(
         major=version.major,
+        version_separator=version_separator,
         minor=version.minor,
         patch=version.patch,
         os=system.value,

@@ -56,13 +56,13 @@ from nuke_version_parser.parser.url_calculator import calculate_url
             SemanticVersion(13, 0, 2),
             OperatingSystem.LINUX,
             Architecture.X86,
-            "https://thefoundry.s3.amazonaws.com/products/nuke/releases/13.0v2/Nuke13.0v2-linux-x86-64-installer.tgz",
+            "https://thefoundry.s3.amazonaws.com/products/nuke/releases/13.0v2/Nuke-13.0v2-linux-x86-64-installer.tgz",
         ),
         (
             SemanticVersion(12, 0, 2),
             OperatingSystem.LINUX,
             Architecture.X86,
-            "https://thefoundry.s3.amazonaws.com/products/nuke/releases/12.0v2/Nuke12.0v2-linux-x86-64-installer.tgz",
+            "https://thefoundry.s3.amazonaws.com/products/nuke/releases/12.0v2/Nuke-12.0v2-linux-x86-64-installer.tgz",
         ),
         (
             SemanticVersion(12, 0, 1),

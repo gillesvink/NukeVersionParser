@@ -24,6 +24,7 @@ class Architecture(str, Enum):
 BASE_URL: str = (
     "https://thefoundry.s3.amazonaws.com/products/nuke/releases/"
     "{major}.{minor}v{patch}/"
-    "Nuke{major}.{minor}v{patch}-{os}-{architecture}.{extension}"
+    "Nuke{version_separator}{major}.{minor}v{patch}-{os}-"
+    "{architecture}.{extension}"
 )
 """Structure of a base url where the executables are stored."""
