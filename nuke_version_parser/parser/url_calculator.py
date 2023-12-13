@@ -4,18 +4,14 @@
 """
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from nuke_version_parser.datamodel.constants import (
     BASE_URL,
     Architecture,
     OperatingSystem,
 )
-
-if TYPE_CHECKING:
-    from nuke_version_parser.datamodel.nuke_data import (
-        SemanticVersion,
-    )
+from nuke_version_parser.datamodel.nuke_data import (
+    SemanticVersion,
+)
 
 
 def _get_architecture_formatting(
@@ -37,8 +33,12 @@ def _get_architecture_formatting(
     """
     if architecture == Architecture.ARM:
         return f"{architecture.value}64"
-
-    format_suffix = "-release-64" if version.major < 13 else "_64"
+    print(version < SemanticVersion(13, 0, 3))
+    format_suffix = "_64"
+    if version < SemanticVersion(12, 0, 2):
+        format_suffix = "-release-64"
+    elif version < SemanticVersion(13, 0, 3):
+        format_suffix = "-64-installer"
     return f"{architecture.value}{format_suffix}"
 
 

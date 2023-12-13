@@ -26,6 +26,43 @@ class TestSemanticVersion:
         """Test conversion to string to return version format in 1.0v1."""
         assert str(SemanticVersion(1, 0, 1)) == "1.0v1"
 
+    @staticmethod
+    @pytest.mark.parametrize(
+        ("first_version", "second_version", "first_is_newer_than_second"),
+        [
+            (SemanticVersion(1, 0, 2), SemanticVersion(1, 0, 1), True),
+            (SemanticVersion(1, 1, 1), SemanticVersion(1, 0, 1), True),
+            (SemanticVersion(2, 0, 1), SemanticVersion(1, 0, 1), True),
+            (SemanticVersion(1, 1, 1), SemanticVersion(1, 1, 3), False),
+            (SemanticVersion(1, 11, 20), SemanticVersion(10, 0, 3), False),
+            (SemanticVersion(19, 0, 1), SemanticVersion(1, 30, 511), True),
+        ],
+    )
+    def test_size_comparison(
+        first_version: SemanticVersion,
+        second_version: SemanticVersion,
+        first_is_newer_than_second: bool,
+    ) -> None:
+        """Test comparisons to report if one version is larger or not."""
+        assert (first_version > second_version) == first_is_newer_than_second
+        inversed_result = not first_is_newer_than_second
+        assert (first_version < second_version) == inversed_result
+
+    @staticmethod
+    def test_size_comparison_with_equal_data() -> None:
+        """Test to make sure equal data will always return False."""
+        assert (SemanticVersion(1, 0, 1) < SemanticVersion(1, 0, 1)) == False
+        assert (SemanticVersion(1, 0, 1) > SemanticVersion(1, 0, 1)) == False
+
+    @staticmethod
+    def test_size_comparison_with_invalid_object() -> None:
+        """Test to raise a TypeError when compared to an invalid object."""
+        with pytest.raises(
+            TypeError,
+            match="Comparison only allowed to SemanticVersion object.",
+        ):
+            SemanticVersion(1, 2, 3) > 1
+
 
 class TestNukeRelease:
     """Tests related to the NukeRelease object."""

@@ -17,10 +17,10 @@ from nuke_version_parser.parser.url_calculator import calculate_url
     ("version", "system", "architecture", "expected_url"),
     [
         (
-            SemanticVersion(12, 3, 2),
+            SemanticVersion(10, 0, 1),
             OperatingSystem.LINUX,
             Architecture.X86,
-            "https://thefoundry.s3.amazonaws.com/products/nuke/releases/12.3v2/Nuke12.3v2-linux-x86-release-64.tgz",
+            "https://thefoundry.s3.amazonaws.com/products/nuke/releases/10.0v1/Nuke10.0v1-linux-x86-release-64.tgz",
         ),
         (
             SemanticVersion(13, 3, 2),
@@ -45,6 +45,30 @@ from nuke_version_parser.parser.url_calculator import calculate_url
             OperatingSystem.WINDOWS,
             Architecture.X86,
             "https://thefoundry.s3.amazonaws.com/products/nuke/releases/13.3v2/Nuke13.3v2-win-x86_64.zip",
+        ),
+        (
+            SemanticVersion(13, 0, 3),
+            OperatingSystem.WINDOWS,
+            Architecture.X86,
+            "https://thefoundry.s3.amazonaws.com/products/nuke/releases/13.0v3/Nuke13.0v3-win-x86_64.zip",
+        ),
+        (
+            SemanticVersion(13, 0, 2),
+            OperatingSystem.LINUX,
+            Architecture.X86,
+            "https://thefoundry.s3.amazonaws.com/products/nuke/releases/13.0v2/Nuke13.0v2-linux-x86-64-installer.tgz",
+        ),
+        (
+            SemanticVersion(12, 0, 2),
+            OperatingSystem.LINUX,
+            Architecture.X86,
+            "https://thefoundry.s3.amazonaws.com/products/nuke/releases/12.0v2/Nuke12.0v2-linux-x86-64-installer.tgz",
+        ),
+        (
+            SemanticVersion(12, 0, 1),
+            OperatingSystem.LINUX,
+            Architecture.X86,
+            "https://thefoundry.s3.amazonaws.com/products/nuke/releases/12.0v1/Nuke12.0v1-linux-x86-release-64.tgz",
         ),
     ],
 )

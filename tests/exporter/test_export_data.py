@@ -4,6 +4,7 @@
 """
 
 
+import json
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
@@ -154,7 +155,9 @@ def test__convert_data_to_json() -> None:
 
     converted_data = _convert_data_to_json(test_families)
 
-    assert converted_data == '{"15": "first_data", "16": "second_data"}'
+    assert converted_data == json.dumps(
+        {"15": "first_data", "16": "second_data"}, indent=4
+    )
 
 
 def test__write_json_to_file(tmp_path: Path) -> None:
@@ -175,4 +178,3 @@ def test__write_json_to_file_to_raise_exception() -> None:
         ValueError, match="Provided path does not end with .json"
     ):
         _write_json_to_file(json_data=None, file_path=test_file)
-

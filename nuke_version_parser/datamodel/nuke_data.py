@@ -25,6 +25,42 @@ class SemanticVersion:
         """Return object in string format."""
         return f"{self.major}.{self.minor}v{self.patch}"
 
+    def __gt__(self, other: SemanticVersion) -> bool:
+        """Greater than implementation.
+
+        Args:
+            other: other object to compare to.
+
+        Raises:
+            TypeError: if provided object is not a SemanticVersion.
+
+        Returns:
+            True if greater than, False if not.
+        """
+        if not isinstance(other, self.__class__):
+            msg = "Comparison only allowed to SemanticVersion object."
+            raise TypeError(msg)
+        if self == other:
+            return False
+        if self.major != other.major:
+            return self.major > other.major
+        if self.minor != other.minor:
+            return self.minor > other.minor
+        return self.patch > other.patch
+
+    def __lt__(self, other: SemanticVersion) -> bool:
+        """Lower than implementation.
+
+        Args:
+            other: other object to compare to.
+
+        Returns:
+            True if smaller than, False if not.
+        """
+        if self == other:
+            return False
+        return not self.__gt__(other)
+
 
 @dataclass
 class NukeInstaller:
