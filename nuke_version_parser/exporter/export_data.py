@@ -165,8 +165,13 @@ def collect_and_write_json_files(directory: Path) -> None:
     Args:
         directory: path to write files to.
     """
-    all_data = collect_families()
-    logging.info("Done collecting all families data.")
+    try:
+        all_data = collect_families()
+        logging.info("Done collecting all families data.")
+    except TimeoutError:
+        msg = "No active internet connection, could not fetch data."
+        logging.warning(msg)
+        return
 
     _sort_families(all_data)
 
