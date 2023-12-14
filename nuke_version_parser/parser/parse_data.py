@@ -90,7 +90,7 @@ class _VersionParser:
             version=self._version, system=system, architecture=architecture
         )
         response = requests.head(calculated_url, timeout=10)
-        if response.status_code != 200:
+        if response.status_code != 200:  # noqa: PLR2004
             msg = f"Found no data for {calculated_url}"
             logger.info(msg)
             return None
@@ -125,15 +125,15 @@ def parse_release_data_by_attribute(
     Returns:
         list of NukeRelease if found, else empty list.
     """
-    latest_version = deepcopy(start_version)
-    previous_release = _VersionParser.to_nuke_release(start_version)
+    latest_version = _get_version_to_process(start_version)
+    previous_release = _VersionParser.to_nuke_release(latest_version)
     if not previous_release:
         return []
 
     nuke_releases = [previous_release]
 
     while previous_release:
-        latest_version = deepcopy(latest_version)
+        latest_version = _get_version_to_process(latest_version)
         attribute_value = getattr(latest_version, attribute_name)
         setattr(latest_version, attribute_name, attribute_value + 1)
         release = _VersionParser.to_nuke_release(latest_version)
@@ -144,9 +144,9 @@ def parse_release_data_by_attribute(
     return nuke_releases
 
 
-def _skip_version_and_jump_to(
+def _get_version_to_process(
     version: SemanticVersion,
-) -> SemanticVersion | None:
+) -> SemanticVersion:
     """Check and return the version to be jumped to.
 
     Args:
@@ -158,4 +158,4 @@ def _skip_version_and_jump_to(
     version_10_5 = SemanticVersion(10, 5, 1)
     if version > SemanticVersion(10, 0, 6) and version < version_10_5:
         return version_10_5
-    return None
+    return deepcopy(version)

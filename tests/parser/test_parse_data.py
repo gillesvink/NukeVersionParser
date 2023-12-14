@@ -20,7 +20,7 @@ from nuke_version_parser.datamodel.nuke_data import (
     SemanticVersion,
 )
 from nuke_version_parser.parser.parse_data import (
-    _skip_version_and_jump_to,
+    _get_version_to_process,
     _VersionParser,
     parse_release_data_by_attribute,
 )
@@ -149,16 +149,32 @@ class TestParseReleaseDataByAttribute:
         version_parser_mock.assert_any_call(expected_calls[1])
 
     @staticmethod
+    def test_version_skips_to() -> None:
+        """Test that version will be skipped to expected version."""
+        with patch(
+            "nuke_version_parser.parser.parse_data._VersionParser.to_nuke_release",
+            return_value=None,
+        ) as version_parser_mock, patch(
+            "nuke_version_parser.parser.parse_data._get_version_to_process",
+            wraps=_get_version_to_process,
+        ) as get_version_to_process_mock:
+            parse_release_data_by_attribute(SemanticVersion(10, 1, 1), "minor")
+        get_version_to_process_mock.assert_called_once_with(
+            SemanticVersion(10, 1, 1)
+        )
+        version_parser_mock.assert_called_with(SemanticVersion(10, 5, 1))
+
+    @staticmethod
     @pytest.mark.parametrize(
         ("test_version", "jump_to"),
         [
-            (SemanticVersion(10, 0, 7), SemanticVersion(10, 5, 1)),
-            (SemanticVersion(10, 0, 1), None),
+            (SemanticVersion(10, 1, 1), SemanticVersion(10, 5, 1)),
+            (SemanticVersion(10, 0, 1), SemanticVersion(10, 0, 1)),
         ],
     )
-    def test_skip_version_and_jump_to(
+    def test__get_version_to_process(
         test_version: SemanticVersion,
         jump_to: SemanticVersion | None,
     ) -> None:
-        """Test to skip return a new version to continue iterating."""
-        assert _skip_version_and_jump_to(test_version) == jump_to
+        """Test the collection of version."""
+        assert _get_version_to_process(test_version) == jump_to

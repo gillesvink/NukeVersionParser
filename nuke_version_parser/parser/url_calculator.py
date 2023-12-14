@@ -56,6 +56,7 @@ def _get_file_extension(operating_system: OperatingSystem) -> str:
         return "dmg"
     return "tgz"
 
+
 def _uses_temporary_naming(version: SemanticVersion) -> bool:
     """This was naming introduced in Nuke 12 and partially 13.
 
@@ -67,11 +68,16 @@ def _uses_temporary_naming(version: SemanticVersion) -> bool:
     Returns:
         True if temporary naming applies, False if not.
     """
-    if version > SemanticVersion(13, 0, 0) and version < SemanticVersion(13, 0, 3):
+    if version > SemanticVersion(13, 0, 0) and version < SemanticVersion(
+        13, 0, 3
+    ):
         return True
-    if version > SemanticVersion(12, 0, 1) and version < SemanticVersion(12, 2, 7):
+    if version > SemanticVersion(12, 0, 1) and version < SemanticVersion(
+        12, 2, 7
+    ):
         return True
     return False
+
 
 def calculate_url(
     version: SemanticVersion,
