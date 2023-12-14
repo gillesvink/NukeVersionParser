@@ -11,10 +11,14 @@ import logging
 from collections import defaultdict
 from dataclasses import astuple
 from operator import attrgetter
-from pathlib import Path
+from typing import TYPE_CHECKING
 
-from nuke_version_parser.datamodel.nuke_data import NukeFamily
 from nuke_version_parser.parser.collector import collect_families
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from nuke_version_parser.datamodel.nuke_data import NukeFamily
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +38,7 @@ def _sort_families(families: list[NukeFamily]) -> None:
         family.releases.sort(key=astuple, reverse=True)
 
 
-def _convert_to_only_minor_releases(families: list[NukeFamily]) -> None:
+def _reduce_to_only_minor_releases(families: list[NukeFamily]) -> None:
     """Reduce families to only contain minor releases
 
     Note: this function respects the original order of the list.
@@ -96,6 +100,62 @@ def _reduce_to_only_supported(families: list[NukeFamily]) -> None:
     families[:] = supported_families
 
 
+def _create_all_json(families: list[NukeFamily]) -> str:
+    """Create all releases JSON.
+
+    Args:
+        families: family data to convert to supported releases
+
+    Returns:
+        str: collected data as JSON.
+    """
+    data = copy.deepcopy(families)
+    return _convert_data_to_json(data)
+
+
+def _create_all_supported_json(families: list[NukeFamily]) -> str:
+    """Create all supported JSON.
+
+    Args:
+        families: family data to convert to minor supported releases
+
+    Returns:
+        str: collected data as JSON.
+    """
+    data = copy.deepcopy(families)
+    _reduce_to_only_supported(data)
+    return _convert_data_to_json(data)
+
+
+def _create_minor_json(families: list[NukeFamily]) -> str:
+    """Create minor releases JSON.
+
+    Args:
+        families: family data to convert to supported releases
+
+    Returns:
+        str: collected data as JSON.
+    """
+    data = copy.deepcopy(families)
+    _reduce_to_only_minor_releases(data)
+    return _convert_data_to_json(data)
+
+
+def _create_minor_supported_json(families: list[NukeFamily]) -> str:
+    """Create minor supported JSON.
+
+    Args:
+        families: family data to convert to minor supported releases
+
+    Returns:
+        str: collected data as JSON.
+    """
+    data = copy.deepcopy(families)
+    _reduce_to_only_minor_releases(data)
+    _reduce_to_only_supported(data)
+    return _convert_data_to_json(data)
+
+
 def collect_and_write_json_files(directory: Path) -> None:
     """Call the collector and write these files to specified path.
 
@@ -110,46 +170,21 @@ def collect_and_write_json_files(directory: Path) -> None:
 
     _sort_families(all_data)
 
-    only_minor_releases = copy.deepcopy(all_data)
-    all_supported_data = copy.deepcopy(all_data)
-    _convert_to_only_minor_releases(only_minor_releases)
-
-    _reduce_to_only_supported(all_supported_data)
-    only_minor_supported_releases = copy.deepcopy(all_supported_data)
-    _convert_to_only_minor_releases(only_minor_supported_releases)
-
-    only_minor_json = _convert_data_to_json(only_minor_releases)
-    only_minor_supported_json = _convert_data_to_json(
-        only_minor_supported_releases
-    )
-    all_releases_json = _convert_data_to_json(all_data)
-    all_supported_releases_json = _convert_data_to_json(all_supported_data)
-    logging.info("Converted all data to JSON.")
-
-    only_minor_path = directory / "nuke-minor-releases.json"
-    only_minor_supported_path = (
-        directory / "nuke-minor-supported-releases.json"
-    )
-    all_releases_path = directory / "nuke-all-releases.json"
-    all_supported_releases_path = (
-        directory / "nuke-all-supported-releases.json"
-    )
-
     _write_json_to_file(
-        json_data=only_minor_json,
-        file_path=only_minor_path,
+        json_data=_create_minor_json(all_data),
+        file_path=directory / "nuke-minor-releases.json",
     )
     _write_json_to_file(
-        json_data=all_releases_json,
-        file_path=all_releases_path,
+        json_data=_create_all_json(all_data),
+        file_path=directory / "nuke-all-releases.json",
     )
     _write_json_to_file(
-        json_data=only_minor_supported_json,
-        file_path=only_minor_supported_path,
+        json_data=_create_minor_supported_json(all_data),
+        file_path=directory / "nuke-minor-supported-releases.json",
     )
     _write_json_to_file(
-        json_data=all_supported_releases_json,
-        file_path=all_supported_releases_path,
+        json_data=_create_all_supported_json(all_data),
+        file_path=directory / "nuke-all-supported-releases.json",
     )
 
     logging.info("Done writing JSON files.")

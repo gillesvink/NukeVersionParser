@@ -7,7 +7,7 @@
 import copy
 import json
 from pathlib import Path
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -18,7 +18,11 @@ from nuke_version_parser.datamodel.nuke_data import (
 )
 from nuke_version_parser.exporter.export_data import (
     _convert_data_to_json,
-    _convert_to_only_minor_releases,
+    _create_all_json,
+    _create_all_supported_json,
+    _create_minor_json,
+    _create_minor_supported_json,
+    _reduce_to_only_minor_releases,
     _reduce_to_only_supported,
     _sort_families,
     _write_json_to_file,
@@ -93,7 +97,7 @@ def test__sort_releases() -> None:
     assert test_unsorted_list == expected_list
 
 
-def test__convert_to_only_minor_releases() -> None:
+def test__reduce_to_only_minor_releases() -> None:
     """Test convert to only contain minor releases.
 
     This will contain latest of patch of latest minor.
@@ -143,7 +147,7 @@ def test__convert_to_only_minor_releases() -> None:
         ),
     ]
 
-    _convert_to_only_minor_releases(test_families)
+    _reduce_to_only_minor_releases(test_families)
     assert test_families == expected_families
 
 
@@ -211,3 +215,71 @@ def test__write_json_to_file_to_raise_exception() -> None:
         ValueError, match="Provided path does not end with .json"
     ):
         _write_json_to_file(json_data=None, file_path=test_file)
+
+
+class TestDataCollectionAndReturning:
+    """These tests simply exist for checking if implementation stays the same.
+
+    All functions called within here have already been tested, so we only need
+    to check if they have been called properly.
+    """
+
+    @staticmethod
+    def test__create_all_json() -> None:
+        """Test the creation of the all json data."""
+        test_families = [MagicMock(spec=NukeFamily)]
+        with patch(
+            "nuke_version_parser.exporter.export_data._convert_data_to_json"
+        ) as convert_to_json_mock:
+            result_data = _create_all_json(test_families)
+
+        assert test_families is not result_data
+        convert_to_json_mock.assert_called_once()
+
+    @staticmethod
+    def test__create_all_supported_json() -> None:
+        """Test the creation of the all supported json data."""
+        test_families = [MagicMock(spec=NukeFamily)]
+        with patch(
+            "nuke_version_parser.exporter.export_data._convert_data_to_json"
+        ) as convert_to_json_mock, patch(
+            "nuke_version_parser.exporter.export_data._reduce_to_only_supported"
+        ) as reduce_mock:
+            result_data = _create_all_supported_json(test_families)
+
+        assert test_families is not result_data
+        convert_to_json_mock.assert_called_once()
+        reduce_mock.assert_called_once()
+
+    @staticmethod
+    def test__create_minor_json() -> None:
+        """Test the creation of the minor releases json data."""
+        test_families = [MagicMock(spec=NukeFamily)]
+        with patch(
+            "nuke_version_parser.exporter.export_data._convert_data_to_json"
+        ) as convert_to_json_mock, patch(
+            "nuke_version_parser.exporter.export_data._reduce_to_only_minor_releases"
+        ) as convert_to_minor_mock:
+            result_data = _create_minor_json(test_families)
+
+        assert test_families is not result_data
+        convert_to_json_mock.assert_called_once()
+        convert_to_minor_mock.assert_called_once()
+
+    @staticmethod
+    def test__create_minor_supported_json() -> None:
+        """Test the creation of the minor supported releases json data."""
+        test_families = [MagicMock(spec=NukeFamily)]
+        with patch(
+            "nuke_version_parser.exporter.export_data._convert_data_to_json"
+        ) as convert_to_json_mock, patch(
+            "nuke_version_parser.exporter.export_data._reduce_to_only_supported"
+        ) as reduce_mock, patch(
+            "nuke_version_parser.exporter.export_data._reduce_to_only_minor_releases"
+        ) as convert_to_minor_mock:
+            result_data = _create_minor_supported_json(test_families)
+
+        assert test_families is not result_data
+        convert_to_json_mock.assert_called_once()
+        reduce_mock.assert_called_once()
+        convert_to_minor_mock.assert_called_once()
