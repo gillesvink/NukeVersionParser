@@ -84,6 +84,18 @@ def _write_json_to_file(json_data: str, file_path: Path) -> None:
     file_path.write_text(json_data)
 
 
+def _reduce_to_only_supported(families: list[NukeFamily]) -> None:
+    """Reduce provided families to only return supported."""
+    supported_families = [
+        family for family in families if family.get_supported()
+    ]
+    for family in supported_families:
+        family.releases = [
+            release for release in family.releases if release.get_supported()
+        ]
+    families[:] = supported_families
+
+
 def collect_and_write_json_files(directory: Path) -> None:
     """Call the collector and write these files to specified path.
 
@@ -99,14 +111,29 @@ def collect_and_write_json_files(directory: Path) -> None:
     _sort_families(all_data)
 
     only_minor_releases = copy.deepcopy(all_data)
-
+    all_supported_data = copy.deepcopy(all_data)
     _convert_to_only_minor_releases(only_minor_releases)
+
+    _reduce_to_only_supported(all_supported_data)
+    only_minor_supported_releases = copy.deepcopy(all_supported_data)
+    _convert_to_only_minor_releases(only_minor_supported_releases)
+
     only_minor_json = _convert_data_to_json(only_minor_releases)
+    only_minor_supported_json = _convert_data_to_json(
+        only_minor_supported_releases
+    )
     all_releases_json = _convert_data_to_json(all_data)
+    all_supported_releases_json = _convert_data_to_json(all_supported_data)
     logging.info("Converted all data to JSON.")
 
     only_minor_path = directory / "nuke-minor-releases.json"
+    only_minor_supported_path = (
+        directory / "nuke-minor-supported-releases.json"
+    )
     all_releases_path = directory / "nuke-all-releases.json"
+    all_supported_releases_path = (
+        directory / "nuke-all-supported-releases.json"
+    )
 
     _write_json_to_file(
         json_data=only_minor_json,
@@ -115,6 +142,14 @@ def collect_and_write_json_files(directory: Path) -> None:
     _write_json_to_file(
         json_data=all_releases_json,
         file_path=all_releases_path,
+    )
+    _write_json_to_file(
+        json_data=only_minor_supported_json,
+        file_path=only_minor_supported_path,
+    )
+    _write_json_to_file(
+        json_data=all_supported_releases_json,
+        file_path=all_supported_releases_path,
     )
 
     logging.info("Done writing JSON files.")

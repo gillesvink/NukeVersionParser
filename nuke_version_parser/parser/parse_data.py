@@ -89,7 +89,7 @@ class _VersionParser:
         calculated_url = calculate_url(
             version=self._version, system=system, architecture=architecture
         )
-        response = requests.head(calculated_url, timeout=1)
+        response = requests.head(calculated_url, timeout=10)
         if response.status_code != 200:
             msg = f"Found no data for {calculated_url}"
             logger.info(msg)

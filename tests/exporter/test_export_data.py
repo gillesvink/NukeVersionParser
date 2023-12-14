@@ -4,9 +4,10 @@
 """
 
 
+import copy
 import json
 from pathlib import Path
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -18,6 +19,7 @@ from nuke_version_parser.datamodel.nuke_data import (
 from nuke_version_parser.exporter.export_data import (
     _convert_data_to_json,
     _convert_to_only_minor_releases,
+    _reduce_to_only_supported,
     _sort_families,
     _write_json_to_file,
 )
@@ -143,6 +145,37 @@ def test__convert_to_only_minor_releases() -> None:
 
     _convert_to_only_minor_releases(test_families)
     assert test_families == expected_families
+
+
+def test__reduce_to_only_supported() -> None:
+    """Test to keep only the supported releases in the provided list."""
+    mock_release = MagicMock(
+        spec=NukeRelease, version=SemanticVersion(1, 0, 1)
+    )
+    mock_release.get_supported.return_value = True
+
+    supported_release = copy.deepcopy(mock_release)
+    unsupported_release = copy.deepcopy(mock_release)
+    unsupported_release.get_supported.return_value = False
+    test_families = [
+        NukeFamily([supported_release, unsupported_release]),
+        NukeFamily(
+            [
+                unsupported_release,
+            ]
+        ),
+    ]
+    expected_result = [
+        NukeFamily(
+            [
+                supported_release,
+            ]
+        ),
+    ]
+
+    _reduce_to_only_supported(test_families)
+
+    assert test_families == expected_result
 
 
 def test__convert_data_to_json() -> None:

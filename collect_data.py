@@ -21,6 +21,7 @@ def run_collector() -> None:
     Raises:
         RuntimeError: if no JSON_WRITE_DIRECTORY environment is set.
     """
+    os.environ["JSON_WRITE_DIRECTORY"] = "/Users/gillesvink/Code/AllNukeVersions/"
     write_directory = os.getenv("JSON_WRITE_DIRECTORY")
     if not write_directory:
         msg = "No write directory specified, set the JSON_WRITE_DIRECTORY env."
