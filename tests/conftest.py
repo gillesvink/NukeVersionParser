@@ -3,11 +3,11 @@
 @maintainer: Gilles Vink
 """
 
+from datetime import datetime, timezone
 from unittest.mock import MagicMock, patch
 
 import pytest
 from requests import Response
-from datetime import datetime, timezone
 
 
 @pytest.fixture(autouse=True)
