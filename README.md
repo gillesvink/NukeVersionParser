@@ -1,6 +1,25 @@
 # NukeVersionParser
 An automatic parser that generates JSON reports containing the latest Nuke versions. For an up-to-date graphical view of what is still supported by Foundry, visit [Foundry's support page](https://support.foundry.com/hc/en-us/articles/360019296599).
 
+Example from the provided JSON files (nuke-minor-supported-releases.json):
+```json
+{
+    "15": {
+        "15.0v2": {
+            "installer": {
+                "mac_arm": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/15.0v2/Nuke15.0v2-mac-arm64.dmg",
+                "mac_x86": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/15.0v2/Nuke15.0v2-mac-x86_64.dmg",
+                "linux_x86": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/15.0v2/Nuke15.0v2-linux-x86_64.tgz",
+                "windows_x86": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/15.0v2/Nuke15.0v2-win-x86_64.zip"
+            },
+            "date": "Wed, 15 Nov 2023 15:08:31 GMT",
+            "supported": true
+        }
+    },
+}
+```
+
+
 ## Why?
 This tool is designed for the automatic building of plugins. It eliminates the need to manually specify versions, making scripts relying on the JSON able to automate their building process.
 
@@ -37,6 +56,9 @@ minor_supported_releases_json = minor_supported_release.json()
 
 nuke_15_data = minor_supported_releases_json.get("15")
 ```
+
+## Requests/Issues
+If you feel like something could be added or if something is not working as it should, feel free to make an issue on this repository.
 
 ## Disclaimer
 This project is an independent effort, not affiliated with or endorsed by Foundry. It retrieves data from all Nuke versions for automatic building purposes. The terms "Nuke" and related trademarks are the property of Foundry, used here for descriptive purposes only. For official information and support, please refer to Foundry's [official website](https://www.foundry.com/).
