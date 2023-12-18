@@ -29,7 +29,7 @@ This tool is designed for the automatic building of plugins.
 It eliminates the need to manually specify versions, 
 making scripts relying on the JSON able to automate their building process.
 
-## What Data Does It Collect?
+## What data does it collect?
 * Nuke families with all their versions, 
   following semantic versioning 
   (Major = Family, Minor = Feature improvements, Patch = Bugfixes).
@@ -48,7 +48,7 @@ There are 4 exported JSON files:
 * `nuke-minor-supported-releases.json`: this contains all minor
    releases that are currently still supported.
 
-## How Does It Work?
+## How does it work?
 The tool scans the server for all executables, 
 constructing the JSON from the collected data. 
 
@@ -58,7 +58,7 @@ There is no manual process, ensuring it stays up-to-date automatically.
 
 This means the naming scheme should stay the same. If this changes, this can be adapted in the `url_calculator.py`.
 
-## How to Use?
+## How to use?
 Retrieve the raw JSON links for use in your scripts. 
 As JSON is not restricted to any language, it can be used anywhere. 
 Multiple JSON files serve different purposes. 
@@ -77,10 +77,12 @@ import requests
 
 requested_data = requests.get(
     "https://raw.githubusercontent.com/gillesvink/NukeVersionParser/main/nuke-minor-releases.json"
-    )
-minor_supported_releases_json = minor_supported_release.json()
+)
+supported_releases = requested_data.json()
+nuke_15_data = supported_releases.get("15")
 
-nuke_15_data = minor_supported_releases_json.get("15")
+print(nuke_15_data)
+>> {'15.0v2': {'installer': {'mac_arm': 'https://thefoundry.s3.amazonaws.com/products/nuke/releases/15.0v2/Nuke15.0v2-mac-arm64.dmg', 'mac_x86': 'https://thefoundry.s3.amazonaws.com/products/nuke/releases/15.0v2/Nuke15.0v2-mac-x86_64.dmg', 'linux_x86': 'https://thefoundry.s3.amazonaws.com/products/nuke/releases/15.0v2/Nuke15.0v2-linux-x86_64.tgz', 'windows_x86': 'https://thefoundry.s3.amazonaws.com/products/nuke/releases/15.0v2/Nuke15.0v2-win-x86_64.zip'}, 'date': 'Wed, 15 Nov 2023 15:08:31 GMT', 'supported': True}}
 ```
 
 ## Requests/Issues
