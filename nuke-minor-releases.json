@@ -140,6 +140,16 @@
         }
     },
     "10": {
+        "10.5v8": {
+            "installer": {
+                "mac_arm": null,
+                "mac_x86": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/10.5v8/Nuke10.5v8-mac-x86-release-64.dmg",
+                "linux_x86": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/10.5v8/Nuke10.5v8-linux-x86-release-64.tgz",
+                "windows_x86": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/10.5v8/Nuke10.5v8-win-x86-release-64.zip"
+            },
+            "date": "Fri, 21 Sep 2018 13:47:14 GMT",
+            "supported": false
+        },
         "10.0v6": {
             "installer": {
                 "mac_arm": null,
