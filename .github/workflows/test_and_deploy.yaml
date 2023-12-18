@@ -52,7 +52,11 @@ jobs:
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           git branch
           git pull
-          git commit -a -m "${{ github.event.head_commit.message }}"
-          git push
-      
+          if [[ -n $(git status -s) ]]; then
+            git commit -a -m "${{ github.event.head_commit.message }}"
+            git push
+          else
+            echo "No changes to commit."
+          fi
+            
       
