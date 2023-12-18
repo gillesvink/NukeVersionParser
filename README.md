@@ -76,7 +76,7 @@ To collect the data in Python as a dictionary, you can run this code:
 import requests
 
 requested_data = requests.get(
-    "https://github.com/gillesvink/NukeVersionParser/raw/branch/main/nuke-all-supported-releases.json"
+    "https://raw.githubusercontent.com/gillesvink/NukeVersionParser/main/nuke-minor-releases.json"
     )
 minor_supported_releases_json = minor_supported_release.json()
 
