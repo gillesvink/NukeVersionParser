@@ -53,7 +53,7 @@ jobs:
           git branch
           git pull
           if [[ -n $(git status -s) ]]; then
-            git commit -a -m "${{ github.event.head_commit.message }}"
+            git commit -a -m  "Parse new data."
             git push
           else
             echo "No changes to commit."
