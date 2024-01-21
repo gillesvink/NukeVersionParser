@@ -74,7 +74,7 @@
                 "windows_x86": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/12.2v11/Nuke12.2v11-win-x86_64.zip"
             },
             "date": "Wed, 20 Jul 2022 19:32:59 GMT",
-            "supported": true
+            "supported": false
         },
         "12.1v5": {
             "installer": {
