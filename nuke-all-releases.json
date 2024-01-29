@@ -182,7 +182,7 @@
                 "windows_x86": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/13.2v3/Nuke13.2v3-win-x86_64.zip"
             },
             "date": "Thu, 28 Jul 2022 09:02:22 GMT",
-            "supported": true
+            "supported": false
         },
         "13.2v2": {
             "installer": {
