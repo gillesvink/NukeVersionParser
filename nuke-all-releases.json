@@ -282,7 +282,7 @@
                 "windows_x86": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/13.0v10/Nuke13.0v10-win-x86_64.zip"
             },
             "date": "Tue, 16 Aug 2022 10:52:16 GMT",
-            "supported": true
+            "supported": false
         },
         "13.0v9": {
             "installer": {
