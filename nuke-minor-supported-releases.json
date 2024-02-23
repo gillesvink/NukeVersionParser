@@ -22,14 +22,14 @@
             "date": "Thu, 08 Feb 2024 12:07:55 GMT",
             "supported": true
         },
-        "14.0v6": {
+        "14.0v7": {
             "installer": {
                 "mac_arm": null,
-                "mac_x86": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/14.0v6/Nuke14.0v6-mac-x86_64.dmg",
-                "linux_x86": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/14.0v6/Nuke14.0v6-linux-x86_64.tgz",
-                "windows_x86": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/14.0v6/Nuke14.0v6-win-x86_64.zip"
+                "mac_x86": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/14.0v7/Nuke14.0v7-mac-x86_64.dmg",
+                "linux_x86": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/14.0v7/Nuke14.0v7-linux-x86_64.tgz",
+                "windows_x86": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/14.0v7/Nuke14.0v7-win-x86_64.zip"
             },
-            "date": "Thu, 21 Sep 2023 09:59:22 GMT",
+            "date": "Tue, 20 Feb 2024 17:11:59 GMT",
             "supported": true
         }
     },
