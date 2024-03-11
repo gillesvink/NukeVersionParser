@@ -203,16 +203,6 @@
             },
             "date": "Thu, 27 Oct 2022 10:35:56 GMT",
             "supported": true
-        },
-        "13.2v4": {
-            "installer": {
-                "mac_arm": null,
-                "mac_x86": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/13.2v4/Nuke13.2v4-mac-x86_64.dmg",
-                "linux_x86": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/13.2v4/Nuke13.2v4-linux-x86_64.tgz",
-                "windows_x86": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/13.2v4/Nuke13.2v4-win-x86_64.zip"
-            },
-            "date": "Thu, 08 Sep 2022 06:25:30 GMT",
-            "supported": true
         }
     }
 }
