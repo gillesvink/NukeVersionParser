@@ -170,7 +170,7 @@
                 "windows_x86": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/14.0v2/Nuke14.0v2-win-x86_64.zip"
             },
             "date": "Thu, 19 Jan 2023 14:50:33 GMT",
-            "supported": true
+            "supported": false
         },
         "14.0v1": {
             "installer": {
