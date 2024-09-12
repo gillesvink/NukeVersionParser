@@ -4,10 +4,10 @@
             "installer": {
                 "mac_arm": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/15.1v3/Nuke15.1v3-mac-arm64.dmg",
                 "mac_x86": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/15.1v3/Nuke15.1v3-mac-x86_64.dmg",
-                "linux_x86": null,
+                "linux_x86": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/15.1v3/Nuke15.1v3-linux-x86_64.tgz",
                 "windows_x86": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/15.1v3/Nuke15.1v3-win-x86_64.zip"
             },
-            "date": "Tue, 10 Sep 2024 10:23:25 GMT",
+            "date": "Tue, 10 Sep 2024 15:53:11 GMT",
             "supported": true
         },
         "15.0v5": {
