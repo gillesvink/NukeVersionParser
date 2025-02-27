@@ -1,16 +1,30 @@
 [project]
 name = "nukeversionparser"
-version = "0.1.0"
+version = "1.1.0"
 description = "Automatic parser that reports in a JSON all latest Nuke versions"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "requests>=2.32.3",
+]
+
+[tool.uv]
+package=true
+
+[project.scripts]
+nuke-versionparser = "nukeversionparser.main:main"
+
+[tool.hatch.build.tarwgets.wheel]
+packages = ["src/nuketesting"]
 
 [tool.black]
 line-length = 79
 
 [tool.pytest.ini_options]
 addopts = "--capture=tee-sys"
+pythonpath = [
+    "src"
+]
 
 [tool.isort]
 profile = "black"

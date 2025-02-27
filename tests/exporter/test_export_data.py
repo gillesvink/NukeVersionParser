@@ -11,12 +11,12 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from nuke_version_parser.datamodel.nuke_data import (
+from nukeversionparser.datamodel.nuke_data import (
     NukeFamily,
     NukeRelease,
     SemanticVersion,
 )
-from nuke_version_parser.exporter.export_data import (
+from nukeversionparser.exporter.export_data import (
     _convert_data_to_json,
     _create_all_json,
     _create_all_supported_json,
@@ -229,7 +229,7 @@ class TestDataCollectionAndReturning:
         """Test the creation of the all json data."""
         test_families = [MagicMock(spec=NukeFamily)]
         with patch(
-            "nuke_version_parser.exporter.export_data._convert_data_to_json"
+            "nukeversionparser.exporter.export_data._convert_data_to_json"
         ) as convert_to_json_mock:
             result_data = _create_all_json(test_families)
 
@@ -241,9 +241,9 @@ class TestDataCollectionAndReturning:
         """Test the creation of the all supported json data."""
         test_families = [MagicMock(spec=NukeFamily)]
         with patch(
-            "nuke_version_parser.exporter.export_data._convert_data_to_json"
+            "nukeversionparser.exporter.export_data._convert_data_to_json"
         ) as convert_to_json_mock, patch(
-            "nuke_version_parser.exporter.export_data._reduce_to_only_supported"
+            "nukeversionparser.exporter.export_data._reduce_to_only_supported"
         ) as reduce_mock:
             result_data = _create_all_supported_json(test_families)
 
@@ -256,9 +256,9 @@ class TestDataCollectionAndReturning:
         """Test the creation of the minor releases json data."""
         test_families = [MagicMock(spec=NukeFamily)]
         with patch(
-            "nuke_version_parser.exporter.export_data._convert_data_to_json"
+            "nukeversionparser.exporter.export_data._convert_data_to_json"
         ) as convert_to_json_mock, patch(
-            "nuke_version_parser.exporter.export_data._reduce_to_only_minor_releases"
+            "nukeversionparser.exporter.export_data._reduce_to_only_minor_releases"
         ) as convert_to_minor_mock:
             result_data = _create_minor_json(test_families)
 
@@ -271,11 +271,11 @@ class TestDataCollectionAndReturning:
         """Test the creation of the minor supported releases json data."""
         test_families = [MagicMock(spec=NukeFamily)]
         with patch(
-            "nuke_version_parser.exporter.export_data._convert_data_to_json"
+            "nukeversionparser.exporter.export_data._convert_data_to_json"
         ) as convert_to_json_mock, patch(
-            "nuke_version_parser.exporter.export_data._reduce_to_only_supported"
+            "nukeversionparser.exporter.export_data._reduce_to_only_supported"
         ) as reduce_mock, patch(
-            "nuke_version_parser.exporter.export_data._reduce_to_only_minor_releases"
+            "nukeversionparser.exporter.export_data._reduce_to_only_minor_releases"
         ) as convert_to_minor_mock:
             result_data = _create_minor_supported_json(test_families)
 

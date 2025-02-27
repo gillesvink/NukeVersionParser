@@ -18,7 +18,7 @@ def _requests_mock() -> None:
     response_mock.headers = {"last-modified": "test_date"}
 
     requests_patch = patch(
-        "nuke_version_parser.parser.parse_data.requests.head",
+        "nukeversionparser.parser.parse_data.requests.head",
         return_value=response_mock,
     )
 
@@ -31,7 +31,7 @@ def _current_time_mock() -> None:
     """Make sure the tests run in the same time each time."""
     current_date = datetime(2020, 1, 1, 0, 0, 0, tzinfo=timezone.utc)
     with patch(
-        "nuke_version_parser.datamodel.nuke_data.datetime", wraps=datetime
+        "nukeversionparser.datamodel.nuke_data.datetime", wraps=datetime
     ) as time_mock:
         time_mock.now.return_value = current_date
         yield

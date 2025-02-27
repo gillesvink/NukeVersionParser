@@ -9,12 +9,12 @@ from __future__ import annotations
 
 from copy import deepcopy
 
-from nuke_version_parser.datamodel.nuke_data import (
+from nukeversionparser.datamodel.nuke_data import (
     NukeFamily,
     NukeRelease,
     SemanticVersion,
 )
-from nuke_version_parser.parser.parse_data import (
+from nukeversionparser.parser.parse_data import (
     parse_release_data_by_attribute,
 )
 

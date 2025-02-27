@@ -4,12 +4,12 @@
 """
 from __future__ import annotations
 
-from nuke_version_parser.datamodel.constants import (
+from nukeversionparser.datamodel.constants import (
     BASE_URL,
     Architecture,
     OperatingSystem,
 )
-from nuke_version_parser.datamodel.nuke_data import (
+from nukeversionparser.datamodel.nuke_data import (
     SemanticVersion,
 )
 

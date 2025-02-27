@@ -6,12 +6,12 @@
 
 from unittest.mock import patch
 
-from nuke_version_parser.datamodel.nuke_data import (
+from nukeversionparser.datamodel.nuke_data import (
     NukeFamily,
     NukeRelease,
     SemanticVersion,
 )
-from nuke_version_parser.parser.collector import (
+from nukeversionparser.parser.collector import (
     _find_all_minor_versions,
     _find_all_patch_versions,
     _get_all_families,
@@ -30,7 +30,7 @@ def test__get_all_families() -> None:
     expected_families = [NukeFamily([release_1]), NukeFamily([release_2])]
 
     with patch(
-        "nuke_version_parser.parser.collector.parse_release_data_by_attribute"
+        "nukeversionparser.parser.collector.parse_release_data_by_attribute"
     ) as version_parser_mock:
         version_parser_mock.return_value = [
             release_1,
@@ -58,7 +58,7 @@ def test__find_all_minor_versions() -> None:
     )
 
     with patch(
-        "nuke_version_parser.parser.collector.parse_release_data_by_attribute"
+        "nukeversionparser.parser.collector.parse_release_data_by_attribute"
     ) as version_parser_mock:
         version_parser_mock.return_value = [
             new_release_2,
@@ -86,7 +86,7 @@ def test__find_all_patch_versions() -> None:
     )
 
     with patch(
-        "nuke_version_parser.parser.collector.parse_release_data_by_attribute"
+        "nukeversionparser.parser.collector.parse_release_data_by_attribute"
     ) as version_parser_mock:
         version_parser_mock.return_value = [
             new_release_2,
@@ -120,12 +120,12 @@ def test_collect_families() -> None:
     major_families = [family1, family2]
 
     with patch(
-        "nuke_version_parser.parser.collector._get_all_families",
+        "nukeversionparser.parser.collector._get_all_families",
         return_value=major_families,
     ) as get_families_mock, patch(
-        "nuke_version_parser.parser.collector._find_all_minor_versions",
+        "nukeversionparser.parser.collector._find_all_minor_versions",
     ) as find_minor_mock, patch(
-        "nuke_version_parser.parser.collector._find_all_patch_versions",
+        "nukeversionparser.parser.collector._find_all_patch_versions",
     ) as find_patch_mock:
         collected_families = collect_families()
 

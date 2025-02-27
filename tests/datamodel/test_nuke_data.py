@@ -9,7 +9,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from nuke_version_parser.datamodel.nuke_data import (
+from nukeversionparser.datamodel.nuke_data import (
     IncompatibleFamilyError,
     NukeFamily,
     NukeInstaller,
@@ -90,7 +90,7 @@ class TestNukeRelease:
             }
         }
         with patch(
-            "nuke_version_parser.datamodel.nuke_data.NukeRelease.get_supported",
+            "nukeversionparser.datamodel.nuke_data.NukeRelease.get_supported",
             return_value=True,
         ):
             converted_result = test_release.to_dict()
@@ -123,7 +123,7 @@ class TestNukeRelease:
             version=None, installer=None, date=test_date
         )
         with patch(
-            "nuke_version_parser.datamodel.nuke_data.datetime", wraps=datetime
+            "nukeversionparser.datamodel.nuke_data.datetime", wraps=datetime
         ) as datetime_mock:
             datetime_mock.now.return_value = test_current_date
             assert test_release.get_supported() == expected_supported

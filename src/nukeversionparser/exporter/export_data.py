@@ -13,12 +13,12 @@ from dataclasses import astuple
 from operator import attrgetter
 from typing import TYPE_CHECKING
 
-from nuke_version_parser.parser.collector import collect_families
+from nukeversionparser.parser.collector import collect_families
 
 if TYPE_CHECKING:
     from pathlib import Path
 
-    from nuke_version_parser.datamodel.nuke_data import NukeFamily
+    from nukeversionparser.datamodel.nuke_data import NukeFamily
 
 logger = logging.getLogger(__name__)
 

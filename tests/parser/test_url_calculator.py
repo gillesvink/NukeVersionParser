@@ -5,12 +5,12 @@
 
 import pytest
 
-from nuke_version_parser.datamodel.constants import (
+from nukeversionparser.datamodel.constants import (
     Architecture,
     OperatingSystem,
 )
-from nuke_version_parser.datamodel.nuke_data import SemanticVersion
-from nuke_version_parser.parser.url_calculator import calculate_url
+from nukeversionparser.datamodel.nuke_data import SemanticVersion
+from nukeversionparser.parser.url_calculator import calculate_url
 
 
 @pytest.mark.parametrize(

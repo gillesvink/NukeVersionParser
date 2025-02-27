@@ -10,16 +10,16 @@ from unittest.mock import MagicMock, patch
 import pytest
 from requests import Response
 
-from nuke_version_parser.datamodel.constants import (
+from nukeversionparser.datamodel.constants import (
     Architecture,
     OperatingSystem,
 )
-from nuke_version_parser.datamodel.nuke_data import (
+from nukeversionparser.datamodel.nuke_data import (
     NukeInstaller,
     NukeRelease,
     SemanticVersion,
 )
-from nuke_version_parser.parser.parse_data import (
+from nukeversionparser.parser.parse_data import (
     _get_version_to_process,
     _VersionParser,
     parse_release_data_by_attribute,
@@ -38,9 +38,9 @@ class TestVersionParser:
         response_mock.status_code = 200 if data_exists else 403
 
         with patch(
-            "nuke_version_parser.parser.parse_data.calculate_url"
+            "nukeversionparser.parser.parse_data.calculate_url"
         ) as url_calculator_mock, patch(
-            "nuke_version_parser.parser.parse_data.requests.head",
+            "nukeversionparser.parser.parse_data.requests.head",
             return_value=response_mock,
         ):
             retrieved_data = version_parser.retrieve_data(
@@ -65,7 +65,7 @@ class TestVersionParser:
         response_mock.status_code = 200 if data_exists else 403
         response_mock.headers = {"last-modified": "test_date"}
         with patch(
-            "nuke_version_parser.parser.parse_data.requests.head",
+            "nukeversionparser.parser.parse_data.requests.head",
             return_value=response_mock,
         ):
             version_parser.retrieve_data(
@@ -85,9 +85,9 @@ class TestVersionParser:
         response_mock.headers = {"last-modified": "test_date"}
 
         with patch(
-            "nuke_version_parser.parser.parse_data.calculate_url"
+            "nukeversionparser.parser.parse_data.calculate_url"
         ) as url_calculator_mock, patch(
-            "nuke_version_parser.parser.parse_data.requests.head",
+            "nukeversionparser.parser.parse_data.requests.head",
             return_value=response_mock,
         ):
             retrieved_data = _VersionParser.to_nuke_release(
@@ -133,7 +133,7 @@ class TestParseReleaseDataByAttribute:
     ) -> None:
         """Test iteration over attribute stops after None."""
         with patch(
-            "nuke_version_parser.parser.parse_data._VersionParser.to_nuke_release"
+            "nukeversionparser.parser.parse_data._VersionParser.to_nuke_release"
         ) as version_parser_mock:
             version_parser_mock.side_effect = [
                 "first_data",
@@ -152,10 +152,10 @@ class TestParseReleaseDataByAttribute:
     def test_version_skips_to() -> None:
         """Test that version will be skipped to expected version."""
         with patch(
-            "nuke_version_parser.parser.parse_data._VersionParser.to_nuke_release",
+            "nukeversionparser.parser.parse_data._VersionParser.to_nuke_release",
             return_value=None,
         ) as version_parser_mock, patch(
-            "nuke_version_parser.parser.parse_data._get_version_to_process",
+            "nukeversionparser.parser.parse_data._get_version_to_process",
             wraps=_get_version_to_process,
         ) as get_version_to_process_mock:
             parse_release_data_by_attribute(SemanticVersion(10, 1, 1), "minor")

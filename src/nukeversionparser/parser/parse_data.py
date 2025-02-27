@@ -9,16 +9,16 @@ from copy import deepcopy
 
 import requests
 
-from nuke_version_parser.datamodel.constants import (
+from nukeversionparser.datamodel.constants import (
     Architecture,
     OperatingSystem,
 )
-from nuke_version_parser.datamodel.nuke_data import (
+from nukeversionparser.datamodel.nuke_data import (
     NukeInstaller,
     NukeRelease,
     SemanticVersion,
 )
-from nuke_version_parser.parser.url_calculator import calculate_url
+from nukeversionparser.parser.url_calculator import calculate_url
 
 __slots__ = ("parse_release_data_by_attribute",)
 
