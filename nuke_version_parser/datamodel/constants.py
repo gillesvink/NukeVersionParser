@@ -17,7 +17,7 @@ class OperatingSystem(str, Enum):
 class Architecture(str, Enum):
     """Current processor architectures."""
 
-    X86: str = "x86"
+    X86_64: str = "x86"
     ARM: str = "arm"
 
 

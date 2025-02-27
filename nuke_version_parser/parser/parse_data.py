@@ -48,14 +48,14 @@ class _VersionParser:
             NukeRelease if data found else None
         """
         version_parser = cls(version)
-        linux_x86 = version_parser.retrieve_data(
-            system=OperatingSystem.LINUX, architecture=Architecture.X86
+        linux_x86_64 = version_parser.retrieve_data(
+            system=OperatingSystem.LINUX, architecture=Architecture.X86_64
         )
-        windows_x86 = version_parser.retrieve_data(
-            system=OperatingSystem.WINDOWS, architecture=Architecture.X86
+        windows_x86_64 = version_parser.retrieve_data(
+            system=OperatingSystem.WINDOWS, architecture=Architecture.X86_64
         )
-        mac_x86 = version_parser.retrieve_data(
-            system=OperatingSystem.MAC, architecture=Architecture.X86
+        mac_x86_64 = version_parser.retrieve_data(
+            system=OperatingSystem.MAC, architecture=Architecture.X86_64
         )
         mac_arm = version_parser.retrieve_data(
             system=OperatingSystem.MAC, architecture=Architecture.ARM
@@ -65,9 +65,9 @@ class _VersionParser:
             return None
 
         installer_data = NukeInstaller(
-            linux_x86=linux_x86,
-            windows_x86=windows_x86,
-            mac_x86=mac_x86,
+            linux_x86_64=linux_x86_64,
+            windows_x86_64=windows_x86_64,
+            mac_x86_64=mac_x86_64,
             mac_arm=mac_arm,
         )
         return NukeRelease(

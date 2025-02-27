@@ -73,17 +73,17 @@ class TestNukeRelease:
         test_release = NukeRelease(
             version=SemanticVersion(1, 0, 1),
             installer=NukeInstaller(
-                linux_x86="some url", windows_x86="another url"
+                linux_x86_64="some url", windows_x86_64="another url"
             ),
             date="my date",
         )
         expected_dict = {
             "1.0v1": {
                 "installer": {
-                    "linux_x86": "some url",
+                    "linux_x86_64": "some url",
                     "mac_arm": None,
-                    "mac_x86": None,
-                    "windows_x86": "another url",
+                    "mac_x86_64": None,
+                    "windows_x86_64": "another url",
                 },
                 "date": "my date",
                 "supported": True,

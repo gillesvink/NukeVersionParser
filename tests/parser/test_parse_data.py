@@ -44,13 +44,13 @@ class TestVersionParser:
             return_value=response_mock,
         ):
             retrieved_data = version_parser.retrieve_data(
-                OperatingSystem.LINUX, Architecture.X86
+                OperatingSystem.LINUX, Architecture.X86_64
             )
 
         url_calculator_mock.assert_called_once_with(
             version=SemanticVersion(1, 0, 0),
             system=OperatingSystem.LINUX,
-            architecture=Architecture.X86,
+            architecture=Architecture.X86_64,
         )
         if data_exists:
             assert retrieved_data
@@ -69,7 +69,7 @@ class TestVersionParser:
             return_value=response_mock,
         ):
             version_parser.retrieve_data(
-                OperatingSystem.LINUX, Architecture.X86
+                OperatingSystem.LINUX, Architecture.X86_64
             )
 
         if data_exists:

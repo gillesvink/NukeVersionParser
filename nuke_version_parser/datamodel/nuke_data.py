@@ -69,11 +69,11 @@ class NukeInstaller:
     mac_arm: str = None
     """URL to the Mac ARM (M1, M2..) installer.
     Note: only supported from Nuke 15+"""
-    mac_x86: str = None
+    mac_x86_64: str = None
     """URL to the Mac installer."""
-    linux_x86: str = None
+    linux_x86_64: str = None
     """URL to the Linux installer."""
-    windows_x86: str = None
+    windows_x86_64: str = None
     """URL to the Windows installer."""
 
 
