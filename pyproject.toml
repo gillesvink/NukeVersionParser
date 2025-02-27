@@ -1,3 +1,11 @@
+[project]
+name = "nukeversionparser"
+version = "0.1.0"
+description = "Automatic parser that reports in a JSON all latest Nuke versions"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = []
+
 [tool.black]
 line-length = 79
 
@@ -48,4 +56,4 @@ select = [
     "YTT",
 ]
 show-fixes = true
-target-version = "py37"
+target-version = "py313"
