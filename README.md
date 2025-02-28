@@ -1,4 +1,4 @@
-[![python](https://img.shields.io/badge/Python-3.12-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org)
+[![python](https://img.shields.io/badge/Python-3.13-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org)
 [![PEP8](https://img.shields.io/badge/code%20style-pep8-orange.svg)](https://www.python.org/dev/peps/pep-0008/)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 ![Tests](https://ci.codeberg.org/api/badges/14278/status.svg)
@@ -6,7 +6,7 @@
 # NukeVersionParser
 An automatic parser that generates JSON reports containing the latest Nuke versions. For an up-to-date graphical view of what is still supported by Foundry, visit [Foundry's support page](https://support.foundry.com/hc/en-us/articles/360019296599).
 
-Example from the provided JSON files (nuke-minor-supported-releases.json):
+Example from the provided JSON files (`nuke-minor-supported-releases.json`):
 ```json
 {
     "15": {
@@ -77,7 +77,7 @@ To collect the data in Python as a dictionary, you can run this code:
 import requests
 
 requested_data = requests.get(
-    "https://raw.githubusercontent.com/gillesvink/NukeVersionParser/main/nuke-minor-releases.json"
+    "https://codeberg.org/gillesvink/NukeVersionParser/raw/branch/main/nuke-minor-releases.json"
 )
 supported_releases = requested_data.json()
 nuke_15_data = supported_releases.get("15")
