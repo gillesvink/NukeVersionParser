@@ -1,7 +1,7 @@
 [![python](https://img.shields.io/badge/Python-3.12-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org)
 [![PEP8](https://img.shields.io/badge/code%20style-pep8-orange.svg)](https://www.python.org/dev/peps/pep-0008/)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-![Last parse run](https://github.com/gillesvink/NukeVersionParser/actions/workflows/test_and_deploy.yaml/badge.svg)
+![Tests](https://ci.codeberg.org/api/badges/14278/status.svg)
 
 # NukeVersionParser
 An automatic parser that generates JSON reports containing the latest Nuke versions. For an up-to-date graphical view of what is still supported by Foundry, visit [Foundry's support page](https://support.foundry.com/hc/en-us/articles/360019296599).

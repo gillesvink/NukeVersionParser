@@ -14,9 +14,6 @@ package=true
 [project.scripts]
 nuke-versionparser = "nukeversionparser.main:main"
 
-[tool.hatch.build.tarwgets.wheel]
-packages = ["src/nuketesting"]
-
 [tool.black]
 line-length = 79
 
@@ -71,3 +68,8 @@ select = [
 ]
 show-fixes = true
 target-version = "py313"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.4",
+]
