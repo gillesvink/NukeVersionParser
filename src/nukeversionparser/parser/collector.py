@@ -4,9 +4,9 @@ This object is responsible for fetching family data.
 
 @maintainer: Gilles Vink
 """
-
 from __future__ import annotations
 
+import concurrent.futures
 from copy import deepcopy
 
 from nukeversionparser.datamodel.nuke_data import (
@@ -69,7 +69,13 @@ def _find_all_patch_versions(
 def collect_families() -> list[NukeFamily]:
     """Fetch and collect all releases into families."""
     families = _get_all_families()
-    for family in families:
-        _find_all_minor_versions(family)
-        _find_all_patch_versions(family)
+
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        futures = []
+        for family in families:
+            futures.append(executor.submit(_find_all_minor_versions, family))
+            futures.append(executor.submit(_find_all_patch_versions, family))
+
+        concurrent.futures.wait(futures)
+
     return families
