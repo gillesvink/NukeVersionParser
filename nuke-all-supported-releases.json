@@ -82,6 +82,16 @@
             "date": "Mon, 10 Jun 2024 16:08:34 GMT",
             "supported": true
         },
+        "15.0v7": {
+            "installer": {
+                "mac_arm": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/15.0v7/Nuke15.0v7-mac-arm64.dmg",
+                "mac_x86_64": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/15.0v7/Nuke15.0v7-mac-x86_64.dmg",
+                "linux_x86_64": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/15.0v7/Nuke15.0v7-linux-x86_64.tgz",
+                "windows_x86_64": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/15.0v7/Nuke15.0v7-win-x86_64.zip"
+            },
+            "date": "Mon, 14 Apr 2025 17:05:33 GMT",
+            "supported": true
+        },
         "15.0v6": {
             "installer": {
                 "mac_arm": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/15.0v6/Nuke15.0v6-mac-arm64.dmg",
@@ -134,6 +144,16 @@
         }
     },
     "14": {
+        "14.1v7": {
+            "installer": {
+                "mac_arm": null,
+                "mac_x86_64": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/14.1v7/Nuke14.1v7-mac-x86_64.dmg",
+                "linux_x86_64": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/14.1v7/Nuke14.1v7-linux-x86_64.tgz",
+                "windows_x86_64": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/14.1v7/Nuke14.1v7-win-x86_64.zip"
+            },
+            "date": "Mon, 14 Apr 2025 15:56:30 GMT",
+            "supported": true
+        },
         "14.1v6": {
             "installer": {
                 "mac_arm": null,
