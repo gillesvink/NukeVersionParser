@@ -64,17 +64,5 @@
             "date": "Wed, 07 Aug 2024 11:30:04 GMT",
             "supported": true
         }
-    },
-    "13": {
-        "13.2v9": {
-            "installer": {
-                "mac_arm": null,
-                "mac_x86_64": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/13.2v9/Nuke13.2v9-mac-x86_64.dmg",
-                "linux_x86_64": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/13.2v9/Nuke13.2v9-linux-x86_64.tgz",
-                "windows_x86_64": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/13.2v9/Nuke13.2v9-win-x86_64.zip"
-            },
-            "date": "Wed, 06 Mar 2024 13:03:43 GMT",
-            "supported": true
-        }
     }
 }
