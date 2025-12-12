@@ -232,16 +232,6 @@
             "date": "Wed, 24 Jul 2024 14:28:22 GMT",
             "supported": true
         },
-        "15.1v1": {
-            "installer": {
-                "mac_arm": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/15.1v1/Nuke15.1v1-mac-arm64.dmg",
-                "mac_x86_64": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/15.1v1/Nuke15.1v1-mac-x86_64.dmg",
-                "linux_x86_64": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/15.1v1/Nuke15.1v1-linux-x86_64.tgz",
-                "windows_x86_64": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/15.1v1/Nuke15.1v1-win-x86_64.zip"
-            },
-            "date": "Mon, 10 Jun 2024 16:08:34 GMT",
-            "supported": true
-        },
         "15.0v8": {
             "installer": {
                 "mac_arm": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/15.0v8/Nuke15.0v8-mac-arm64.dmg",

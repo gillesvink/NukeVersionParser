@@ -240,7 +240,7 @@
                 "windows_x86_64": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/15.1v1/Nuke15.1v1-win-x86_64.zip"
             },
             "date": "Mon, 10 Jun 2024 16:08:34 GMT",
-            "supported": true
+            "supported": false
         },
         "15.0v8": {
             "installer": {
