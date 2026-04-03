@@ -1,5 +1,15 @@
 {
     "16": {
+        "16.0v9": {
+            "installer": {
+                "mac_arm": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/16.0v9/Nuke16.0v9-mac-arm64.dmg",
+                "mac_x86_64": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/16.0v9/Nuke16.0v9-mac-x86_64.dmg",
+                "linux_x86_64": null,
+                "windows_x86_64": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/16.0v9/Nuke16.0v9-win-x86_64.zip"
+            },
+            "date": "Thu, 02 Apr 2026 10:22:11 GMT",
+            "supported": true
+        },
         "16.0v8": {
             "installer": {
                 "mac_arm": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/16.0v8/Nuke16.0v8-mac-arm64.dmg",
