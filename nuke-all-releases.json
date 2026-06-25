@@ -470,7 +470,7 @@
             "installer": {
                 "mac_arm": null,
                 "mac_x86_64": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/14.1v2/Nuke14.1v2-mac-x86_64.dmg",
-                "linux_x86_64": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/14.1v2/Nuke14.1v2-linux-x86_64.tgz",
+                "linux_x86_64": null,
                 "windows_x86_64": "https://thefoundry.s3.amazonaws.com/products/nuke/releases/14.1v2/Nuke14.1v2-win-x86_64.zip"
             },
             "date": "Wed, 15 Nov 2023 15:09:39 GMT",
